@@ -4,17 +4,17 @@ import lombok.Data;
 import lombok.Getter;
 
 @Data
-public class InnerClass {
+public class InnerClassWithGenericField {
     //GENERATED FIELDS START
-    private com.github.pinkolik.general_classes_generator.test.general.InnerClass.Inner inner;
+    private java.util.List<com.github.pinkolik.general_classes_generator.test.general.InnerClassWithGenericField.Inner> a;
+    private java.util.Set<com.github.pinkolik.general_classes_generator.test.general.InnerClassWithGenericField.Inner> b;
+    private java.util.Map<java.lang.String, com.github.pinkolik.general_classes_generator.test.general.InnerClassWithGenericField.Inner> c;
     //GENERATED FIELDS END
     //GENERATED INNER CLASSES START
     @Data
     public static class Inner {
         //GENERATED FIELDS START
-        private java.lang.String a;
-        private int b;
-        private com.github.pinkolik.general_classes_generator.test.general.InnerClass.Inner c;
+
         //GENERATED FIELDS END
         //GENERATED INNER CLASSES START
         //${inner_classes}

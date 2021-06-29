@@ -32,6 +32,8 @@ public class GeneralClassGeneratorImpl implements Generator {
 
     private static final String INNER_CLASSES_HOLDER = "//${inner_classes}";
 
+    private static final String DATA_ANNOTATION_HOLDER = "${data_annotation}";
+
     private static final Pattern INNER_CLASSES_SPACES_PATTERN = Pattern.compile("( *)//\\$\\{inner_classes}");
 
     private static final String GENERAL_CLASS_TEMPLATE_PATH = "templates/GeneralClassTemplate.java";
@@ -54,7 +56,7 @@ public class GeneralClassGeneratorImpl implements Generator {
     private static String getPathToClass(final String outputBasePath, final ClassInfo classInfo) {
         String generalClassName = classInfo.getName();
         return classInfo.isMember() ? outputBasePath + File.separator +
-                generalClassName.substring(0, generalClassName.lastIndexOf('$')).replace(".", File.separator) + ".java" :
+                generalClassName.substring(0, generalClassName.indexOf('$')).replace(".", File.separator) + ".java" :
                outputBasePath + File.separator + generalClassName.replace(".", File.separator) + ".java";
     }
 
@@ -92,7 +94,17 @@ public class GeneralClassGeneratorImpl implements Generator {
             }
             classTemplateToWrite = classTemplateToWrite.replace(INNER_CLASSES_HOLDER, prettyPrintedClassTemplate);
         }
+        classTemplateToWrite = classTemplateToWrite.replaceAll(" +\\r\\n", "\r\n");
         FileUtils.writeStringToFile(classFile, classTemplateToWrite, StandardCharsets.UTF_8);
+    }
+
+    private static String getStaticFinalValueString(final FieldInfo fieldInfo) {
+        if (fieldInfo.isStatic() && fieldInfo.isFinal()) {
+            String value = String.class.getName().equals(fieldInfo.getType()) ?
+                           "\"" + fieldInfo.getStaticFinalValue() + "\"" : fieldInfo.getStaticFinalValue().toString();
+            return " = " + value;
+        }
+        return "";
     }
 
     private static String getFieldsString(final String classTemplate, final ClassInfo generalClassInfo,
@@ -115,11 +127,14 @@ public class GeneralClassGeneratorImpl implements Generator {
             }
             if (!fieldInfo.isEnum()) {
                 //@formatter:off
-                fieldsStringBuilder.append("private ")
+                fieldsStringBuilder.append(fieldInfo.isStatic() && fieldInfo.isFinal() ? "@Getter\r\n" + spacesPrefix : "")
+                                   .append("private ")
                                    .append(fieldInfo.isStatic() ? "static " : "")
+                                   .append(fieldInfo.isFinal() ? "final " : "")
                                    .append(fieldInfo.getType())
                                    .append(" ")
                                    .append(fieldInfo.getName())
+                                   .append(getStaticFinalValueString(fieldInfo))
                                    .append(";\r\n");
                 //@formatter:on
             }
@@ -152,6 +167,7 @@ public class GeneralClassGeneratorImpl implements Generator {
         classTemplate = classTemplate.replace(CLASS_NAME_HOLDER, simpleClassName);
         classTemplate = classTemplate.replace(FIELDS_HOLDER, fieldsString);
         classTemplate = classTemplate.replace(TYPE_HOLDER, generalClassInfo.isEnum() ? "enum" : "class");
+        classTemplate = classTemplate.replace(DATA_ANNOTATION_HOLDER, generalClassInfo.isEnum() ? "" : "@Data");
         classTemplate = classTemplate.replace(IS_STATIC_HOLDER, generalClassInfo.isStatic() ? " static" : "");
         writeTemplateToFile(pathToClass, classTemplate, generalClassInfo);
     }
@@ -166,7 +182,7 @@ public class GeneralClassGeneratorImpl implements Generator {
     }
 
     @Override
-    public void generate() throws IOException {
+    public void generate() throws IOException, IllegalAccessException {
         Map<ClassInfo, Set<FieldInfo>> generalClassInfoToFieldInfosMap =
                 GeneratorUtil.buildGeneralClassNameToFieldInfoMap(versionClassesBasePath, versionRegexPattern);
         writeGeneralClasses(generalClassInfoToFieldInfosMap, outputBasePath);

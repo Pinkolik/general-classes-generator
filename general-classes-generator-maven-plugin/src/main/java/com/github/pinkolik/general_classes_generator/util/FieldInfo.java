@@ -15,6 +15,9 @@ public class FieldInfo {
 
     private final boolean isStatic;
 
+    private final boolean isFinal;
+
     private final boolean isEnum;
 
+    private final Object staticFinalValue;
 }

@@ -1,13 +1,17 @@
 package com.github.pinkolik.general_classes_generator.test.general;
 
 import lombok.Data;
+import lombok.Getter;
 
 @Data
-public class Simple {
+public class ClassWithSimpleConstant {
     //GENERATED FIELDS START
-    private java.lang.String a;
-    private int b;
-    private com.github.pinkolik.general_classes_generator.test.general.Simple c;
+    @Getter
+    private static final int A = 1;
+    @Getter
+    private static final java.lang.String B = "String";
+    @Getter
+    private static final double C = 0.25;
     //GENERATED FIELDS END
     //GENERATED INNER CLASSES START
     //${inner_classes}

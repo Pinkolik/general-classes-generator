@@ -3,3 +3,4 @@
 /general-classes-generator-maven-plugin/target/
 /general-classes-generator-tests/target/
 /**/*.iml
+/general-classes-generator-tests/src/test/resources/actual/

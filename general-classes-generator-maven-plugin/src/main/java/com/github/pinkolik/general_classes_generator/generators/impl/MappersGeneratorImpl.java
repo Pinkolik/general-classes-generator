@@ -61,7 +61,7 @@ public class MappersGeneratorImpl implements Generator {
             Set<Class<?>> classes = entry.getValue();
             for (Class<?> aClass : classes) {
                 String mapperName = aClass.getSimpleName() + GeneratorUtil.MAPPER_POSTFIX;
-                String packageName = aClass.getPackageName();
+                String packageName = aClass.getPackage().getName();
                 String pathToMapper = getPathToMapper(outputBasePath, aClass);
                 String mapperTemplate = IOUtils.resourceToString(MAPPER_TEMPLATE_PATH, StandardCharsets.UTF_8,
                                                                  MappersGeneratorImpl.class.getClassLoader());

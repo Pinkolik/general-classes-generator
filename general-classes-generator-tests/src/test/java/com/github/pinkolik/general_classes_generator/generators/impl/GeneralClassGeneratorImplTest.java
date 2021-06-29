@@ -24,9 +24,10 @@ class GeneralClassGeneratorImplTest {
 
     private static final String BASE_PACKAGE_PATH = "com/github/pinkolik/general_classes_generator/test/general/";
 
-    private static final String VERSION_CLASSES_BASE_PATH = "src/main/java/com/github/pinkolik/general_classes_generator/test/general";
+    private static final String VERSION_CLASSES_BASE_PATH =
+            "src/main/java/com/github/pinkolik/general_classes_generator/test/general";
 
-    private void baseCompareTwoFilesTest(final String filename) throws IOException {
+    private void baseCompareTwoFilesTest(final String filename) throws IOException, IllegalAccessException {
         Generator generator = new GeneralClassGeneratorImpl(VERSION_CLASSES_BASE_PATH, VERSION_REGEX_PATTERN, ACTUAL_PATH);
         String expected = FileUtils.readFileToString(new File(EXPECTED_PATH + filename), StandardCharsets.UTF_8);
 
@@ -37,22 +38,37 @@ class GeneralClassGeneratorImplTest {
     }
 
     @Test
-    void simpleFieldsMergeTest() throws IOException {
+    void simpleFieldsMergeTest() throws IOException, IllegalAccessException {
         baseCompareTwoFilesTest("Simple.java");
     }
 
     @Test
-    void simpleEnumsMergeTest() throws IOException {
+    void simpleEnumsMergeTest() throws IOException, IllegalAccessException {
         baseCompareTwoFilesTest("Enum.java");
     }
 
     @Test
-    void singleInnerClassTest() throws IOException {
+    void singleInnerClassTest() throws IOException, IllegalAccessException {
         baseCompareTwoFilesTest("InnerClass.java");
     }
 
     @Test
-    void emptyClassTest() throws IOException {
+    void emptyClassTest() throws IOException, IllegalAccessException {
         baseCompareTwoFilesTest("Empty.java");
+    }
+
+    @Test
+    void innerClassWithInnerEnumTest() throws IOException, IllegalAccessException {
+        baseCompareTwoFilesTest("InnerClassWithInnerEnum.java");
+    }
+
+    @Test
+    void innerClassWithGenericFieldTest() throws IOException, IllegalAccessException {
+        baseCompareTwoFilesTest("InnerClassWithGenericField.java");
+    }
+
+    @Test
+    void classWithSimpleConstantTest() throws IOException, IllegalAccessException {
+        baseCompareTwoFilesTest("ClassWithSimpleConstant.java");
     }
 }

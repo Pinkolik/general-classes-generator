@@ -24,9 +24,10 @@ class MappersGeneratorImplTest {
 
     private static final String BASE_PACKAGE_PATH = "com/github/pinkolik/general_classes_generator/test/mappers/";
 
-    private static final String VERSION_CLASSES_BASE_PATH = "src/main/java/com/github/pinkolik/general_classes_generator/test/mappers";
+    private static final String VERSION_CLASSES_BASE_PATH =
+            "src/main/java/com/github/pinkolik/general_classes_generator/test/mappers";
 
-    private void baseCompareTwoFilesTestForAllVersions(final String filename) throws IOException {
+    private void baseCompareTwoFilesTestForAllVersions(final String filename) throws IOException, IllegalAccessException {
         Generator generator = new MappersGeneratorImpl(VERSION_CLASSES_BASE_PATH, VERSION_REGEX_PATTERN, ACTUAL_PATH);
         generator.generate();
         for (int i = 1; i < 4; i++) {
@@ -40,12 +41,12 @@ class MappersGeneratorImplTest {
     }
 
     @Test
-    void mappersGeneratedTest() throws IOException {
+    void mappersGeneratedTest() throws IOException, IllegalAccessException {
         baseCompareTwoFilesTestForAllVersions("SimpleMapper.java");
     }
 
     @Test
-    void mappersForInnerClassNotGeneratedTest() throws IOException {
+    void mappersForInnerClassNotGeneratedTest() throws IOException, IllegalAccessException {
         Generator generator = new MappersGeneratorImpl(VERSION_CLASSES_BASE_PATH, VERSION_REGEX_PATTERN, ACTUAL_PATH);
         generator.generate();
 

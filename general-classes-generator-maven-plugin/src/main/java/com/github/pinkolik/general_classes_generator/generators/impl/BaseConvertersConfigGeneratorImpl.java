@@ -43,6 +43,8 @@ public class BaseConvertersConfigGeneratorImpl implements Generator {
 
     private static final String BASE_CONVERTER_IMPL_CLASS_NAME_HOLDER = "${base_converter_impl_class_name}";
 
+    private static final String GENERAL_CLASSES_BASE_PACKAGE_HOLDER = "${general_classes_base_package}";
+
     private static final Class<?> BASE_MAPPER_CLASS = BaseMapper.class;
 
     private static final Class<?> BASE_CONVERTER_CLASS = BaseConverter.class;
@@ -53,19 +55,20 @@ public class BaseConvertersConfigGeneratorImpl implements Generator {
 
     private final Pattern versionRegexPattern;
 
-    private final String mappersBasePackage;
+    private final String mappersBasePath;
 
     private final String outputPath;
 
     public BaseConvertersConfigGeneratorImpl(final String versionClassesBasePath, final String versionRegexPattern,
-                                             final String mappersBasePackage, final String outputPath) {
+                                             final String mappersBasePath, final String outputPath) {
         this.versionClassesBasePath = versionClassesBasePath;
         this.versionRegexPattern = Pattern.compile(versionRegexPattern);
-        this.mappersBasePackage = mappersBasePackage;
+        this.mappersBasePath = mappersBasePath;
         this.outputPath = outputPath;
     }
 
-    private static String buildBeansString(final Map<String, Set<ConverterInfo>> versionToConverterInfoMap) throws IOException {
+    private static String buildBeansString(final Map<String, Set<ConverterInfo>> versionToConverterInfoMap,
+                                           final String generalClassesBasePackage) throws IOException {
         String baseConverterBeanTemplate = IOUtils.resourceToString(BASE_CONVERTER_BEAN_TEMPLATE_PATH, StandardCharsets.UTF_8,
                                                                     BaseConvertersConfigGeneratorImpl.class.getClassLoader());
         StringBuilder beansStringBuilder = new StringBuilder();
@@ -105,20 +108,23 @@ public class BaseConvertersConfigGeneratorImpl implements Generator {
                     putToMaps.length() > 0 ? putToMaps.substring(0, putToMaps.length() - 2) : putToMaps.toString();
             currentVersionConverter = currentVersionConverter.replace(PUT_TO_MAPS_HOLDER, putToMapsString);
             currentVersionConverter = currentVersionConverter.replace(VERSION_HOLDER, version);
+            currentVersionConverter =
+                    currentVersionConverter.replace(GENERAL_CLASSES_BASE_PACKAGE_HOLDER, generalClassesBasePackage);
             beansStringBuilder.append(currentVersionConverter);
         }
         return beansStringBuilder.toString();
     }
 
     private static void writeBeansConverterConfig(final Map<String, Set<ConverterInfo>> versionToConverterInfoMap,
-                                                  final String outputBasePath) throws IOException {
+                                                  final String outputBasePath, final String generalClassesBasePackage)
+            throws IOException {
         String baseConvertersConfigTemplate =
                 IOUtils.resourceToString(BASE_CONVERTERS_CONFIG_TEMPLATE_PATH, StandardCharsets.UTF_8,
                                          BaseConvertersConfigGeneratorImpl.class.getClassLoader());
         String pathToClass = outputBasePath + File.separator + BASE_CONVERTERS_CONFIG_FILE_NAME;
         String fullClassName = GeneratorUtil.convertPathToClassToClassName(pathToClass);
         String packageName = fullClassName.substring(0, fullClassName.lastIndexOf("."));
-        String beansString = buildBeansString(versionToConverterInfoMap);
+        String beansString = buildBeansString(versionToConverterInfoMap, generalClassesBasePackage);
         baseConvertersConfigTemplate = baseConvertersConfigTemplate.replace(PACKAGE_NAME_HOLDER, packageName);
         Matcher matcher = CONVERTERS_CONFIGS_SPACES_PATTERN.matcher(baseConvertersConfigTemplate);
         if (matcher.find()) {
@@ -139,7 +145,8 @@ public class BaseConvertersConfigGeneratorImpl implements Generator {
     @Override
     public void generate() throws IOException {
         Map<String, Set<ConverterInfo>> versionToConverterInfoMap =
-                GeneratorUtil.buildVersionToConverterInfoMap(versionClassesBasePath, versionRegexPattern, mappersBasePackage);
-        writeBeansConverterConfig(versionToConverterInfoMap, outputPath);
+                GeneratorUtil.buildVersionToConverterInfoMap(versionClassesBasePath, versionRegexPattern, mappersBasePath);
+        String generalClassesBasePackage = GeneratorUtil.convertPathToPackageName(versionClassesBasePath);
+        writeBeansConverterConfig(versionToConverterInfoMap, outputPath, generalClassesBasePackage);
     }
 }

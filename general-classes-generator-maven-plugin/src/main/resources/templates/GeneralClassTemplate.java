@@ -1,4 +1,4 @@
-@Data
+${data_annotation}
 public ${is_static} ${type} ${class_name} {
     //GENERATED FIELDS START
     ${fields}

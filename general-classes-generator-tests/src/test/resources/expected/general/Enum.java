@@ -1,8 +1,9 @@
 package com.github.pinkolik.general_classes_generator.test.general;
 
 import lombok.Data;
+import lombok.Getter;
 
-@Data
+
 public enum Enum {
     //GENERATED FIELDS START
     A,
