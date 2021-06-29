@@ -1,0 +1,5 @@
+/.idea/
+/general-classes-generator-conversion/target/
+/general-classes-generator-maven-plugin/target/
+/general-classes-generator-tests/target/
+/**/*.iml
