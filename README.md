@@ -239,7 +239,7 @@ Add this to your pom.xml.
             <plugin>
                 <groupId>io.github.pinkolik</groupId>
                 <artifactId>general-classes-generator-maven-plugin</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
+                <version>0.0.1-RELEASE</version>
                 <executions>
                     <execution>
                         <id>generate-general-classes</id>
@@ -292,7 +292,7 @@ Add this to your pom.xml.
         <dependency>
             <groupId>io.github.pinkolik</groupId>
             <artifactId>general-classes-generator-conversion</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.0.1-RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
@@ -309,7 +309,7 @@ Add this to your pom.xml.
             <plugin>
                 <groupId>io.github.pinkolik</groupId>
                 <artifactId>general-classes-generator-maven-plugin</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
+                <version>0.0.1-RELEASE</version>
                 <executions>
                     <execution>
                         <id>generate-mappers</id>
@@ -376,7 +376,7 @@ Add this to your pom.xml.
         <dependency>
             <groupId>io.github.pinkolik</groupId>
             <artifactId>general-classes-generator-conversion</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.0.1-RELEASE</version>
         </dependency>
         ...
     </dependencies>
@@ -388,7 +388,7 @@ Add this to your pom.xml.
             <plugin>
                 <groupId>io.github.pinkolik</groupId>
                 <artifactId>general-classes-generator-maven-plugin</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
+                <version>0.0.1-RELEASE</version>
                 <executions>
                     <execution>
                         <id>generate-base-converters-config</id>
