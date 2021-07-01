@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>general-classes-generator</artifactId>
-        <groupId>com.github.pinkolik</groupId>
+        <groupId>io.github.pinkolik</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -18,10 +18,6 @@
         for conversion between generalized and versioned classes.
         To use with General Class Generator Maven Plugin.
     </description>
-
-    <prerequisites>
-        <maven>3.6.3</maven>
-    </prerequisites>
 
     <url>https://github.com/Pinkolik/general-classes-generator</url>
 

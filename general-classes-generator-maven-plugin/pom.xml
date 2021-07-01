@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>general-classes-generator</artifactId>
-        <groupId>com.github.pinkolik</groupId>
+        <groupId>io.github.pinkolik</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
@@ -97,7 +97,7 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.pinkolik</groupId>
+            <groupId>io.github.pinkolik</groupId>
             <artifactId>general-classes-generator-conversion</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
