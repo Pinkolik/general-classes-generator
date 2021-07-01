@@ -11,6 +11,44 @@
 
     <artifactId>general-classes-generator-tests</artifactId>
 
+    <name>General Class Generator Tests</name>
+
+    <description>
+        This module is needed for testing General Class Generator.
+    </description>
+
+    <url>https://github.com/Pinkolik/general-classes-generator</url>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/Pinkolik/general-classes-generator/issues</url>
+    </issueManagement>
+
+    <inceptionYear>2021</inceptionYear>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/Pinkolik/general-classes-generator</url>
+        <connection>scm:git:git://github.com/Pinkolik/general-classes-generator.git</connection>
+        <developerConnection>scm:git:git@github.com:Pinkolik/general-classes-generator.git</developerConnection>
+    </scm>
+
+    <developers>
+        <developer>
+            <email>mrpinkolik@gmail.com</email>
+            <name>Simon Rusinov</name>
+            <url>https://github.com/Pinkolik</url>
+            <id>Pinkolik</id>
+        </developer>
+    </developers>
+
     <dependencies>
         <dependency>
             <groupId>io.github.pinkolik</groupId>

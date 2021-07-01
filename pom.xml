@@ -14,11 +14,46 @@
         <module>general-classes-generator-tests</module>
     </modules>
 
+    <name>General Class Generator</name>
+
+    <url>https://github.com/Pinkolik/general-classes-generator</url>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/Pinkolik/general-classes-generator/issues</url>
+    </issueManagement>
+
+    <inceptionYear>2021</inceptionYear>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/Pinkolik/general-classes-generator</url>
+        <connection>scm:git:git://github.com/Pinkolik/general-classes-generator.git</connection>
+        <developerConnection>scm:git:git@github.com:Pinkolik/general-classes-generator.git</developerConnection>
+    </scm>
+
+    <developers>
+        <developer>
+            <email>mrpinkolik@gmail.com</email>
+            <name>Simon Rusinov</name>
+            <url>https://github.com/Pinkolik</url>
+            <id>Pinkolik</id>
+        </developer>
+    </developers>
+
     <properties>
         <lombok.version>1.18.20</lombok.version>
         <slf4j-api.version>1.7.31</slf4j-api.version>
         <log4j-slf4j-impl.version>2.14.1</log4j-slf4j-impl.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.deploy.skip>true</maven.deploy.skip>
     </properties>
 
     <build>
