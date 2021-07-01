@@ -2,17 +2,13 @@
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
+![Build][build-badge-url]
 [![MIT License][license-shield]][license-url]
+
+[![Maven Central Plugin][maven-central-plugin-shield]][maven-central-plugin-url]
+[![Maven Central Conversion][maven-central-conversion-shield]][maven-central-conversion-url]
+
 [![LinkedIn][linkedin-shield]][linkedin-url]
-
-
-
-<!-- PROJECT LOGO -->
-<br />
-<p align="center">
-  <a href="https://github.com/Pinkolik/general-classes-generator">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
-  </a>
 
 <h3 align="center">General Classes Generator Maven Plugin</h3>
 
@@ -33,7 +29,6 @@
   </p>
 
 
-
 <!-- TABLE OF CONTENTS -->
 <details open="open">
   <summary><h2 style="display: inline-block">Table of Contents</h2></summary>
@@ -41,6 +36,7 @@
     <li>
       <a href="#about-the-project">About The Project</a>
       <ul>
+        <li><a href="#example">Example</a></li>
         <li><a href="#built-with">Built With</a></li>
       </ul>
     </li>
@@ -51,7 +47,13 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
+    <li><a href="#usage">Usage</a>
+      <ul>
+        <li><a href="#generating-generalized-classes">Generating Generalized Classes</a></li>
+        <li><a href="#generating-mappers">Generating Mappers</a></li>
+        <li><a href="#generating-baseconvertersconfig">Generating BaseConvertersConfig</a></li>
+      </ul>
+    </li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
@@ -223,7 +225,7 @@ Tools needed to build this project.
 
 ## Usage
 
-### Generating generalized classes
+### Generating Generalized Classes
 
 Add this to your pom.xml.
 
@@ -273,7 +275,7 @@ Add this to your pom.xml.
 </project>
 ```
 
-### Generating mappers
+### Generating Mappers
 
 Add this to your pom.xml.
 
@@ -501,3 +503,13 @@ Project Link: [https://github.com/Pinkolik/general-classes-generator](https://gi
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=plastic&logo=appveyor&logo=linkedin&colorB=555
 
 [linkedin-url]: https://www.linkedin.com/in/simon-rusinov/
+
+[maven-central-plugin-shield]: https://img.shields.io/maven-central/v/io.github.pinkolik/general-classes-generator-maven-plugin?color=success&label=general-classes-generator-maven-plugin&style=plastic
+
+[maven-central-plugin-url]: https://search.maven.org/artifact/io.github.pinkolik/general-classes-generator-maven-plugin/0.0.1-RELEASE/maven-plugin
+
+[maven-central-conversion-shield]: https://img.shields.io/maven-central/v/io.github.pinkolik/general-classes-generator-conversion?color=success&label=general-classes-generator-conversion&style=plastic
+
+[maven-central-conversion-url]: https://search.maven.org/artifact/io.github.pinkolik/general-classes-generator-conversion/0.0.1-RELEASE/jar
+
+[build-badge-url]: https://github.com/Pinkolik/general-classes-generator/actions/workflows/maven-publish.yml/badge.svg

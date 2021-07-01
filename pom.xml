@@ -7,7 +7,7 @@
     <groupId>io.github.pinkolik</groupId>
     <artifactId>general-classes-generator</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.1-RELEASE</version>
+    <version>0.1.0-SNAPSHOT</version>
     <modules>
         <module>general-classes-generator-maven-plugin</module>
         <module>general-classes-generator-conversion</module>
