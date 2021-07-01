@@ -15,6 +15,9 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Generates generalized classes from multiple versions of this class.
+ */
 @Slf4j
 public class GeneralClassGeneratorImpl implements Generator {
 
@@ -46,6 +49,29 @@ public class GeneralClassGeneratorImpl implements Generator {
 
     private final String outputBasePath;
 
+    /**
+     * Constructor for {@link GeneralClassGeneratorImpl}.
+     *
+     * @param versionClassesBasePath base path to the directory where versioned classes are stored.
+     *                               Example: your project have multiple versions of class Example located at
+     *                               "${project.basedir}/src/main/java/your_package/ver1/Example.java",
+     *                               "${project.basedir}/src/main/java/your_package/ver2/Example.java",
+     *                               "${project.basedir}/src/main/java/your_package/ver3/Example.java".
+     *                               In that case the base path would be "${project.basedir}/src/main/java/your_package".
+     * @param versionRegexPattern    regular expression to extract version part from the path.
+     *                               Example: your project have multiple versions of class Example located at
+     *                               "${project.basedir}/src/main/java/your_package/ver1/Example.java",
+     *                               "${project.basedir}/src/main/java/your_package/ver2/Example.java",
+     *                               "${project.basedir}/src/main/java/your_package/ver3/Example.java".
+     *                               In that case version RegEx would be "ver\d+".
+     * @param outputBasePath         base path to the directory where generalized classes will be generated.
+     *                               Example: your project have multiple versions of class Example located at
+     *                               "${project.basedir}/src/main/java/your_package/ver1/Example.java",
+     *                               "${project.basedir}/src/main/java/your_package/ver2/Example.java",
+     *                               "${project.basedir}/src/main/java/your_package/ver3/Example.java".
+     *                               And outputBasePath is "${project.basedir}/src/main/java/another_package".
+     *                               Then generalized version of Example will be put in "${project.basedir}/src/main/java/another_package/Example.java"
+     */
     public GeneralClassGeneratorImpl(final String versionClassesBasePath, final String versionRegexPattern,
                                      final String outputBasePath) {
         this.versionClassesBasePath = versionClassesBasePath;

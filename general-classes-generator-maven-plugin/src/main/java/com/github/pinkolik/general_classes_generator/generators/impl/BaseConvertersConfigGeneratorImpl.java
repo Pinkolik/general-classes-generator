@@ -17,6 +17,11 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Generates a spring-based converter named {@link com.github.pinkolik.general_classes_generator.conversion.BaseConverter}.
+ *
+ * @see BaseConverter
+ */
 public class BaseConvertersConfigGeneratorImpl implements Generator {
 
     private static final String BASE_CONVERTERS_CONFIG_TEMPLATE_PATH = "templates/BaseConvertersConfigTemplate.java";
@@ -59,6 +64,29 @@ public class BaseConvertersConfigGeneratorImpl implements Generator {
 
     private final String outputPath;
 
+    /**
+     * Constructor for {@link BaseConvertersConfigGeneratorImpl}.
+     *
+     * @param versionClassesBasePath base path to the directory where versioned classes are stored.
+     *                               Example: your project have multiple versions of class Example located at
+     *                               "${project.basedir}/src/main/java/your_package/ver1/Example.java",
+     *                               "${project.basedir}/src/main/java/your_package/ver2/Example.java",
+     *                               "${project.basedir}/src/main/java/your_package/ver3/Example.java".
+     *                               In that case the base path would be "${project.basedir}/src/main/java/your_package".
+     * @param versionRegexPattern    regular expression to extract version part from the path.
+     *                               Example: your project have multiple versions of class Example located at
+     *                               "${project.basedir}/src/main/java/your_package/ver1/Example.java",
+     *                               "${project.basedir}/src/main/java/your_package/ver2/Example.java",
+     *                               "${project.basedir}/src/main/java/your_package/ver3/Example.java".
+     *                               In that case version RegEx would be "ver\d+".
+     * @param mappersBasePath        base path to the directory where mapper interfaces are stored.
+     *                               Example: your have generated mappers for Example located at
+     *                               "${project.basedir}/src/main/java/your_package/ver1/ExampleMapper.java",
+     *                               "${project.basedir}/src/main/java/your_package/ver2/ExampleMapper.java",
+     *                               "${project.basedir}/src/main/java/your_package/ver3/ExampleMapper.java".
+     *                               In that case the base path would be "${project.basedir}/src/main/java/your_package".
+     * @param outputPath             path to the directory where BaseConvertersConfig.java will be put.
+     */
     public BaseConvertersConfigGeneratorImpl(final String versionClassesBasePath, final String versionRegexPattern,
                                              final String mappersBasePath, final String outputPath) {
         this.versionClassesBasePath = versionClassesBasePath;

@@ -14,6 +14,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+/**
+ * Generates mappers which can be used to convert generalized classes to versioned and vice versa.
+ *
+ * @see com.github.pinkolik.general_classes_generator.conversion.BaseMapper
+ */
 public class MappersGeneratorImpl implements Generator {
 
     private static final Class<?> BASE_MAPPER_CLASS = BaseMapper.class;
@@ -38,6 +43,32 @@ public class MappersGeneratorImpl implements Generator {
 
     private final String outputBasePath;
 
+    /**
+     * Constructor for {@link MappersGeneratorImpl}.
+     *
+     * @param versionClassesBasePath base path to the directory where versioned classes are stored.
+     *                               Example: your project have multiple versions of class Example located at
+     *                               "${project.basedir}/src/main/java/your_package/ver1/Example.java",
+     *                               "${project.basedir}/src/main/java/your_package/ver2/Example.java",
+     *                               "${project.basedir}/src/main/java/your_package/ver3/Example.java".
+     *                               In that case the base path would be "${project.basedir}/src/main/java/your_package".
+     * @param versionRegexPattern    regular expression to extract version part from the path.
+     *                               Example: your project have multiple versions of class Example located at
+     *                               "${project.basedir}/src/main/java/your_package/ver1/Example.java",
+     *                               "${project.basedir}/src/main/java/your_package/ver2/Example.java",
+     *                               "${project.basedir}/src/main/java/your_package/ver3/Example.java".
+     *                               In that case version RegEx would be "ver\d+".
+     * @param outputBasePath         base path to the directory where mapper interfaces will be generated.
+     *                               Example: your project have multiple versions of class Example located at
+     *                               "${project.basedir}/src/main/java/your_package/ver1/Example.java",
+     *                               "${project.basedir}/src/main/java/your_package/ver2/Example.java",
+     *                               "${project.basedir}/src/main/java/your_package/ver3/Example.java".
+     *                               And outputBasePath is "${project.basedir}/src/main/java/another_package".
+     *                               Then mappers for Example will be put in
+     *                               "${project.basedir}/src/main/java/another_package/ver1/ExampleMapper.java",
+     *                               "${project.basedir}/src/main/java/another_package/ver2/ExampleMapper.java",
+     *                               "${project.basedir}/src/main/java/another_package/ver3/ExampleMapper.java".
+     */
     public MappersGeneratorImpl(final String versionClassesBasePath, final String versionRegexPattern,
                                 final String outputBasePath) {
         this.versionClassesBasePath = versionClassesBasePath;

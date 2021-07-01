@@ -65,7 +65,7 @@ public class BaseConvertersConfigGeneratorMojo extends AbstractGeneratorMojo {
     private File mappersBasePath;
 
     /**
-     * Path to the directory where BaseConverter.java will be put.
+     * Path to the directory where BaseConvertersConfig.java will be put.
      */
     @Parameter(name = "outputPath", required = true)
     private File outputPath;

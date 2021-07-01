@@ -10,10 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by IntelliJ IDEA.
- * User: rsv
- * Date: 25.04.2021
- * Time: 10:59
+ * Implementation of {@link BaseConverter} which uses
+ * two maps: general classes to mappers and versioned classes to mappers.
  */
 public class BaseConverterImpl implements BaseConverter {
 
@@ -23,6 +21,14 @@ public class BaseConverterImpl implements BaseConverter {
 
     private final String generalClassesBasePackage;
 
+    /**
+     * Constructor for {@link BaseConverterImpl}.
+     * @param generalClassesToMappers general classes to mappers map.
+     * @param versionedClassesToMappers versioned classes to mappers map.
+     * @param generalClassesBasePackage base package of general classes, needed for reflection
+     *                                  operations in order to detect if field should be attempted
+     *                                  to convert or not.
+     */
     public BaseConverterImpl(final Map<Class, BaseMapper> generalClassesToMappers,
                              final Map<Class, BaseMapper> versionedClassesToMappers, final String generalClassesBasePackage) {
         this.generalClassesToMappers = generalClassesToMappers;

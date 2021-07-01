@@ -10,6 +10,7 @@ import java.io.File;
 
 /**
  * Goal which generates mappers which can be used to convert generalized classes to versioned and vice versa.
+ *
  * @see com.github.pinkolik.general_classes_generator.conversion.BaseMapper
  */
 @Mojo(name = "generate-mappers", defaultPhase = LifecyclePhase.GENERATE_SOURCES)
