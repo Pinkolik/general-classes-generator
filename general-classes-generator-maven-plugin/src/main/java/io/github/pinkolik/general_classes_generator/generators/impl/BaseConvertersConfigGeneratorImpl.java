@@ -123,17 +123,17 @@ public class BaseConvertersConfigGeneratorImpl implements Generator {
                          .append(converterInfo.getGeneralClassName())
                          .append(".class, ")
                          .append(converterInfo.getMapperClassName())
-                         .append(".INSTANCE);\r\n")
+                         .append(".INSTANCE);\n")
                          .append(spacesPrefix)
                          .append("versionedClassesToMappers.put(")
                          .append(converterInfo.getVersionedClassName())
                          .append(".class, ")
                          .append(converterInfo.getMapperClassName())
-                         .append(".INSTANCE);\r\n");
+                         .append(".INSTANCE);\n");
                 //@formatter:on
             }
             String putToMapsString =
-                    putToMaps.length() > 0 ? putToMaps.substring(0, putToMaps.length() - 2) : putToMaps.toString();
+                    putToMaps.length() > 0 ? putToMaps.substring(0, putToMaps.length() - 1) : putToMaps.toString();
             currentVersionConverter = currentVersionConverter.replace(PUT_TO_MAPS_HOLDER, putToMapsString);
             currentVersionConverter = currentVersionConverter.replace(VERSION_HOLDER, version);
             currentVersionConverter =
@@ -157,7 +157,7 @@ public class BaseConvertersConfigGeneratorImpl implements Generator {
         Matcher matcher = CONVERTERS_CONFIGS_SPACES_PATTERN.matcher(baseConvertersConfigTemplate);
         if (matcher.find()) {
             String convertersSpaces = matcher.group(1);
-            beansString = beansString.replaceAll(".+\\r\\n", convertersSpaces + "$0");
+            beansString = beansString.replaceAll(".+\\n", convertersSpaces + "$0");
         }
         baseConvertersConfigTemplate =
                 baseConvertersConfigTemplate.replaceFirst(".*\\Q" + CONVERTERS_CONFIGS_HOLDER + "\\E", beansString);

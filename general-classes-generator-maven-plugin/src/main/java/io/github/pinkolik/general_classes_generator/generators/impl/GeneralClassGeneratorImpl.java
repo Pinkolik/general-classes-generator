@@ -116,11 +116,11 @@ public class GeneralClassGeneratorImpl implements Generator {
             String prettyPrintedClassTemplate = classTemplate;
             if (matcher.find()) {
                 String spacesPrefix = matcher.group(1);
-                prettyPrintedClassTemplate = prettyPrintedClassTemplate.replace("\r\n", "\r\n" + spacesPrefix);
+                prettyPrintedClassTemplate = prettyPrintedClassTemplate.replace("\n", "\n" + spacesPrefix);
             }
             classTemplateToWrite = classTemplateToWrite.replace(INNER_CLASSES_HOLDER, prettyPrintedClassTemplate);
         }
-        classTemplateToWrite = classTemplateToWrite.replaceAll(" +\\r\\n", "\r\n");
+        classTemplateToWrite = classTemplateToWrite.replaceAll(" +\\n", "\n");
         FileUtils.writeStringToFile(classFile, classTemplateToWrite, StandardCharsets.UTF_8);
     }
 
@@ -153,7 +153,7 @@ public class GeneralClassGeneratorImpl implements Generator {
             }
             if (!fieldInfo.isEnum()) {
                 //@formatter:off
-                fieldsStringBuilder.append(fieldInfo.isStatic() && fieldInfo.isFinal() ? "@Getter\r\n" + spacesPrefix : "")
+                fieldsStringBuilder.append(fieldInfo.isStatic() && fieldInfo.isFinal() ? "@Getter\n" + spacesPrefix : "")
                                    .append("private ")
                                    .append(fieldInfo.isStatic() ? "static " : "")
                                    .append(fieldInfo.isFinal() ? "final " : "")
@@ -161,13 +161,13 @@ public class GeneralClassGeneratorImpl implements Generator {
                                    .append(" ")
                                    .append(fieldInfo.getName())
                                    .append(getStaticFinalValueString(fieldInfo))
-                                   .append(";\r\n");
+                                   .append(";\n");
                 //@formatter:on
             }
             else {
                 //@formatter:off
                 fieldsStringBuilder.append(fieldInfo.getName())
-                                   .append(",\r\n");
+                                   .append(",\n");
                 //@formatter:on
             }
         }
@@ -176,8 +176,8 @@ public class GeneralClassGeneratorImpl implements Generator {
             return "";
         }
         return generalClassInfo.isEnum() ?
-               fieldsStringBuilder.substring(0, fieldsStringBuilder.length() - 3) :
-               fieldsStringBuilder.substring(0, fieldsStringBuilder.length() - 2);
+               fieldsStringBuilder.substring(0, fieldsStringBuilder.length() - 2) :
+               fieldsStringBuilder.substring(0, fieldsStringBuilder.length() - 1);
         //@formatter:on
     }
 
