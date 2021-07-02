@@ -1,5 +1,5 @@
 ${data_annotation}
-public ${is_static} ${type} ${class_name} {
+public ${is_static} ${type} ${class_name} ${implements}{
     //GENERATED FIELDS START
     ${fields}
     //GENERATED FIELDS END

@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
  * Generates generalized classes from multiple versions of this class.
  */
 @Slf4j
-public class GeneralClassGeneratorImpl implements Generator {
+public class GeneralClassesGeneratorImpl implements Generator {
 
     private static final String CLASS_NAME_HOLDER = "${class_name}";
 
@@ -37,6 +37,8 @@ public class GeneralClassGeneratorImpl implements Generator {
 
     private static final String DATA_ANNOTATION_HOLDER = "${data_annotation}";
 
+    private static final String IMPLEMENTS_HOLDER = "${implements}";
+
     private static final Pattern INNER_CLASSES_SPACES_PATTERN = Pattern.compile("( *)//\\$\\{inner_classes}");
 
     private static final String GENERAL_CLASS_TEMPLATE_PATH = "templates/GeneralClassTemplate.java";
@@ -49,8 +51,10 @@ public class GeneralClassGeneratorImpl implements Generator {
 
     private final String outputBasePath;
 
+    private final boolean makeSerializable;
+
     /**
-     * Constructor for {@link GeneralClassGeneratorImpl}.
+     * Constructor for {@link GeneralClassesGeneratorImpl}.
      *
      * @param versionClassesBasePath base path to the directory where versioned classes are stored.
      *                               Example: your project have multiple versions of class Example located at
@@ -70,13 +74,14 @@ public class GeneralClassGeneratorImpl implements Generator {
      *                               "${project.basedir}/src/main/java/your_package/ver2/Example.java",
      *                               "${project.basedir}/src/main/java/your_package/ver3/Example.java".
      *                               And outputBasePath is "${project.basedir}/src/main/java/another_package".
-     *                               Then generalized version of Example will be put in "${project.basedir}/src/main/java/another_package/Example.java"
+     * @param makeSerializable       If set to {@code true} makes generalized classes implement {@link java.io.Serializable} interface.
      */
-    public GeneralClassGeneratorImpl(final String versionClassesBasePath, final String versionRegexPattern,
-                                     final String outputBasePath) {
+    public GeneralClassesGeneratorImpl(final String versionClassesBasePath, final String versionRegexPattern,
+                                       final String outputBasePath, final boolean makeSerializable) {
         this.versionClassesBasePath = versionClassesBasePath;
         this.versionRegexPattern = Pattern.compile(versionRegexPattern);
         this.outputBasePath = outputBasePath;
+        this.makeSerializable = makeSerializable;
     }
 
     private static String getPathToClass(final String outputBasePath, final ClassInfo classInfo) {
@@ -94,12 +99,12 @@ public class GeneralClassGeneratorImpl implements Generator {
 
     private static String getClassTemplate(final ClassInfo classInfo) throws IOException {
         String generalClassTemplate = IOUtils.resourceToString(GENERAL_CLASS_TEMPLATE_PATH, StandardCharsets.UTF_8,
-                                                               GeneralClassGeneratorImpl.class.getClassLoader());
+                                                               GeneralClassesGeneratorImpl.class.getClassLoader());
         if (classInfo.isMember()) {
             return generalClassTemplate;
         }
         String packageAndImportTemplate = IOUtils.resourceToString(PACKAGE_AND_IMPORT_TEMPLATE_PATH, StandardCharsets.UTF_8,
-                                                                   GeneralClassGeneratorImpl.class.getClassLoader());
+                                                                   GeneralClassesGeneratorImpl.class.getClassLoader());
         return packageAndImportTemplate + generalClassTemplate;
     }
 
@@ -181,29 +186,38 @@ public class GeneralClassGeneratorImpl implements Generator {
         //@formatter:on
     }
 
+    private static String getImplementsString(final ClassInfo generalClassInfo, final boolean makeSerializable) {
+        if (generalClassInfo.isEnum()) {
+            return "";
+        }
+        return makeSerializable ? "implements java.io.Serializable " : "";
+    }
+
     private static void writeGeneralClass(final String outputBasePath, final ClassInfo generalClassInfo,
-                                          final Set<FieldInfo> fieldInfos) throws IOException {
+                                          final Set<FieldInfo> fieldInfos, final boolean makeSerializable) throws IOException {
         String generalClassName = generalClassInfo.getName();
         String pathToClass = getPathToClass(outputBasePath, generalClassInfo);
         String packageName = generalClassName.substring(0, generalClassName.lastIndexOf("."));
         String simpleClassName = getSimpleClassName(generalClassInfo);
         String classTemplate = getClassTemplate(generalClassInfo);
         String fieldsString = getFieldsString(classTemplate, generalClassInfo, fieldInfos);
+        String implementsString = getImplementsString(generalClassInfo, makeSerializable);
         classTemplate = classTemplate.replace(PACKAGE_NAME_HOLDER, packageName);
         classTemplate = classTemplate.replace(CLASS_NAME_HOLDER, simpleClassName);
         classTemplate = classTemplate.replace(FIELDS_HOLDER, fieldsString);
         classTemplate = classTemplate.replace(TYPE_HOLDER, generalClassInfo.isEnum() ? "enum" : "class");
         classTemplate = classTemplate.replace(DATA_ANNOTATION_HOLDER, generalClassInfo.isEnum() ? "" : "@Data");
         classTemplate = classTemplate.replace(IS_STATIC_HOLDER, generalClassInfo.isStatic() ? " static" : "");
+        classTemplate = classTemplate.replace(IMPLEMENTS_HOLDER, implementsString);
         writeTemplateToFile(pathToClass, classTemplate, generalClassInfo);
     }
 
     private static void writeGeneralClasses(final Map<ClassInfo, Set<FieldInfo>> generalClassInfoToFieldInfosMap,
-                                            final String outputBasePath) throws IOException {
+                                            final String outputBasePath, final boolean makeSerializable) throws IOException {
         for (Map.Entry<ClassInfo, Set<FieldInfo>> entry : generalClassInfoToFieldInfosMap.entrySet()) {
             ClassInfo generalClassInfo = entry.getKey();
             Set<FieldInfo> fieldInfos = entry.getValue();
-            writeGeneralClass(outputBasePath, generalClassInfo, fieldInfos);
+            writeGeneralClass(outputBasePath, generalClassInfo, fieldInfos, makeSerializable);
         }
     }
 
@@ -211,7 +225,7 @@ public class GeneralClassGeneratorImpl implements Generator {
     public void generate() throws IOException, IllegalAccessException {
         Map<ClassInfo, Set<FieldInfo>> generalClassInfoToFieldInfosMap =
                 GeneratorUtil.buildGeneralClassNameToFieldInfoMap(versionClassesBasePath, versionRegexPattern);
-        writeGeneralClasses(generalClassInfoToFieldInfosMap, outputBasePath);
+        writeGeneralClasses(generalClassInfoToFieldInfosMap, outputBasePath, makeSerializable);
     }
 
 }

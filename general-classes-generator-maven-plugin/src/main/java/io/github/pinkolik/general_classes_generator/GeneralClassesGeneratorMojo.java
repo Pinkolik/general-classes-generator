@@ -1,7 +1,7 @@
 package io.github.pinkolik.general_classes_generator;
 
 import io.github.pinkolik.general_classes_generator.generators.Generator;
-import io.github.pinkolik.general_classes_generator.generators.impl.GeneralClassGeneratorImpl;
+import io.github.pinkolik.general_classes_generator.generators.impl.GeneralClassesGeneratorImpl;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -64,9 +64,15 @@ public class GeneralClassesGeneratorMojo extends AbstractGeneratorMojo {
     @Parameter(name = "outputBasePath", required = true)
     private File outputBasePath;
 
+    /**
+     * If set to {@code true} makes generalized classes implement {@link java.io.Serializable} interface.
+     */
+    @Parameter(name = "makeSerializable")
+    private boolean makeSerializable;
+
     @Override
     protected Generator createGenerator() {
-        return new GeneralClassGeneratorImpl(versionClassesBasePath.getAbsolutePath(), versionRegexPattern,
-                                             outputBasePath.getAbsolutePath());
+        return new GeneralClassesGeneratorImpl(versionClassesBasePath.getAbsolutePath(), versionRegexPattern,
+                                               outputBasePath.getAbsolutePath(), makeSerializable);
     }
 }
