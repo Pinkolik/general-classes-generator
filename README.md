@@ -241,7 +241,7 @@ Add this to your pom.xml.
             <plugin>
                 <groupId>io.github.pinkolik</groupId>
                 <artifactId>general-classes-generator-maven-plugin</artifactId>
-                <version>0.0.1-RELEASE</version>
+                <version>0.1.0-RELEASE</version>
                 <executions>
                     <execution>
                         <id>generate-general-classes</id>
@@ -294,7 +294,7 @@ Add this to your pom.xml.
         <dependency>
             <groupId>io.github.pinkolik</groupId>
             <artifactId>general-classes-generator-conversion</artifactId>
-            <version>0.0.1-RELEASE</version>
+            <version>0.1.0-RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
@@ -311,7 +311,7 @@ Add this to your pom.xml.
             <plugin>
                 <groupId>io.github.pinkolik</groupId>
                 <artifactId>general-classes-generator-maven-plugin</artifactId>
-                <version>0.0.1-RELEASE</version>
+                <version>0.1.0-RELEASE</version>
                 <executions>
                     <execution>
                         <id>generate-mappers</id>
@@ -378,7 +378,7 @@ Add this to your pom.xml.
         <dependency>
             <groupId>io.github.pinkolik</groupId>
             <artifactId>general-classes-generator-conversion</artifactId>
-            <version>0.0.1-RELEASE</version>
+            <version>0.1.0-RELEASE</version>
         </dependency>
         ...
     </dependencies>
@@ -390,7 +390,7 @@ Add this to your pom.xml.
             <plugin>
                 <groupId>io.github.pinkolik</groupId>
                 <artifactId>general-classes-generator-maven-plugin</artifactId>
-                <version>0.0.1-RELEASE</version>
+                <version>0.1.0-RELEASE</version>
                 <executions>
                     <execution>
                         <id>generate-base-converters-config</id>
@@ -506,10 +506,10 @@ Project Link: [https://github.com/Pinkolik/general-classes-generator](https://gi
 
 [maven-central-plugin-shield]: https://img.shields.io/maven-central/v/io.github.pinkolik/general-classes-generator-maven-plugin?color=success&label=general-classes-generator-maven-plugin&style=plastic
 
-[maven-central-plugin-url]: https://search.maven.org/artifact/io.github.pinkolik/general-classes-generator-maven-plugin/0.0.1-RELEASE/maven-plugin
+[maven-central-plugin-url]: https://search.maven.org/artifact/io.github.pinkolik/general-classes-generator-maven-plugin/0.1.0-RELEASE/maven-plugin
 
 [maven-central-conversion-shield]: https://img.shields.io/maven-central/v/io.github.pinkolik/general-classes-generator-conversion?color=success&label=general-classes-generator-conversion&style=plastic
 
-[maven-central-conversion-url]: https://search.maven.org/artifact/io.github.pinkolik/general-classes-generator-conversion/0.0.1-RELEASE/jar
+[maven-central-conversion-url]: https://search.maven.org/artifact/io.github.pinkolik/general-classes-generator-conversion/0.1.0-RELEASE/jar
 
 [build-badge-url]: https://github.com/Pinkolik/general-classes-generator/actions/workflows/maven-publish.yml/badge.svg
