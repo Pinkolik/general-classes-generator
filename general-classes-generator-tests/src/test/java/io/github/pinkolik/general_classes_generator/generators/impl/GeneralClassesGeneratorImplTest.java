@@ -12,9 +12,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-class GeneralClassGeneratorImplTest {
+class GeneralClassesGeneratorImplTest {
 
-    private final Logger log = LoggerFactory.getLogger(GeneralClassGeneratorImplTest.class);
+    private final Logger log = LoggerFactory.getLogger(GeneralClassesGeneratorImplTest.class);
 
     private static final String ACTUAL_PATH = "src/test/resources/actual/src/main/java/";
 
@@ -27,14 +27,20 @@ class GeneralClassGeneratorImplTest {
     private static final String VERSION_CLASSES_BASE_PATH =
             "src/main/java/io/github/pinkolik/general_classes_generator/test/general";
 
-    private void baseCompareTwoFilesTest(final String filename) throws IOException, IllegalAccessException {
-        Generator generator = new GeneralClassGeneratorImpl(VERSION_CLASSES_BASE_PATH, VERSION_REGEX_PATTERN, ACTUAL_PATH);
+    private void baseCompareTwoFilesTest(final String filename, final boolean makeSerializable)
+            throws IOException, IllegalAccessException {
+        Generator generator =
+                new GeneralClassesGeneratorImpl(VERSION_CLASSES_BASE_PATH, VERSION_REGEX_PATTERN, ACTUAL_PATH, makeSerializable);
         String expected = FileUtils.readFileToString(new File(EXPECTED_PATH + filename), StandardCharsets.UTF_8);
 
         generator.generate();
 
         String actual = FileUtils.readFileToString(new File(ACTUAL_PATH + BASE_PACKAGE_PATH + filename), StandardCharsets.UTF_8);
         Assertions.assertEquals(expected, actual);
+    }
+
+    private void baseCompareTwoFilesTest(final String filename) throws IOException, IllegalAccessException {
+        baseCompareTwoFilesTest(filename, false);
     }
 
     @Test
@@ -70,5 +76,15 @@ class GeneralClassGeneratorImplTest {
     @Test
     void classWithSimpleConstantTest() throws IOException, IllegalAccessException {
         baseCompareTwoFilesTest("ClassWithSimpleConstant.java");
+    }
+
+    @Test
+    void makeSerializableTrueTest() throws IOException, IllegalAccessException {
+        baseCompareTwoFilesTest("SerializableTestClass.java", true);
+    }
+
+    @Test
+    void enumIsNotSerializableWhenMakeSerializableTrueTest() throws IOException, IllegalAccessException {
+        baseCompareTwoFilesTest("EnumIsNotSerializable.java", true);
     }
 }
