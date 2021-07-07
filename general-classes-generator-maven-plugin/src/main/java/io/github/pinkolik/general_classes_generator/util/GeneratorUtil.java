@@ -27,10 +27,7 @@ public final class GeneratorUtil {
                     .replace(File.separator, "."); //replace separators with dots
     }
 
-    private static Map<ClassInfo, Set<Class<?>>> getClassInfosByName(final String className, final Pattern versionRegexPattern)
-            throws ClassNotFoundException {
-        Map<ClassInfo, Set<Class<?>>> result = new LinkedHashMap<>();
-        Class<?> aClass = Class.forName(className);
+    private static String convertClassToGeneralClassName(final Pattern versionRegexPattern, final Class<?> aClass) {
         String generalClassName = aClass.getName();
         Matcher matcher = versionRegexPattern.matcher(generalClassName);
         if (matcher.find()) {
@@ -41,8 +38,22 @@ public final class GeneratorUtil {
             throw new IllegalArgumentException(
                     String.format("Class name %s doesn't contain version pattern \"%s\"", generalClassName, versionRegexPattern));
         }
-        ClassInfo generalClassInfo = new ClassInfo(generalClassName, aClass.isEnum(), aClass.isMemberClass(),
-                                                   Modifier.isStatic(aClass.getModifiers()));
+        return generalClassName;
+    }
+
+    private static Map<ClassInfo, Set<Class<?>>> getClassInfosByName(final String className, final Pattern versionRegexPattern)
+            throws ClassNotFoundException {
+        Map<ClassInfo, Set<Class<?>>> result = new LinkedHashMap<>();
+        Class<?> aClass = Class.forName(className);
+        String generalClassName = convertClassToGeneralClassName(versionRegexPattern, aClass);
+        String superclassGeneralClassName = null;
+        Class<?> superclass = aClass.getSuperclass();
+        if (!superclass.isAssignableFrom(Object.class) && !superclass.isAssignableFrom(Enum.class)) {
+            superclassGeneralClassName = convertClassToGeneralClassName(versionRegexPattern, superclass);
+        }
+        ClassInfo generalClassInfo =
+                new ClassInfo(generalClassName, aClass.isEnum(), aClass.isMemberClass(), Modifier.isStatic(aClass.getModifiers()),
+                              superclassGeneralClassName);
         Set<Class<?>> versions = result.computeIfAbsent(generalClassInfo, key -> new HashSet<>());
         versions.add(aClass);
         for (Class<?> declaredClass : aClass.getDeclaredClasses()) {
@@ -89,10 +100,10 @@ public final class GeneratorUtil {
 
     private static Set<FieldInfo> getFieldInfosForClass(final Pattern versionRegexPattern, final Class<?> aClass)
             throws IllegalAccessException {
-        List<Field> fields = getAllFields(aClass);
+        Field[] fields = aClass.getDeclaredFields();
         Set<FieldInfo> fieldInfos = new HashSet<>();
         for (Field field : fields) {
-            if (aClass.isEnum() && !field.isEnumConstant()) {
+            if (field.isSynthetic()) {
                 continue;
             }
             Type type = field.getGenericType();

@@ -39,6 +39,8 @@ public class GeneralClassesGeneratorImpl implements Generator {
 
     private static final String IMPLEMENTS_HOLDER = "${implements}";
 
+    private static final String EXTENDS_HOLDER = "${extends}";
+
     private static final Pattern INNER_CLASSES_SPACES_PATTERN = Pattern.compile("( *)//\\$\\{inner_classes}");
 
     private static final String GENERAL_CLASS_TEMPLATE_PATH = "templates/GeneralClassTemplate.java";
@@ -193,6 +195,10 @@ public class GeneralClassesGeneratorImpl implements Generator {
         return makeSerializable ? "implements java.io.Serializable " : "";
     }
 
+    private static String getExtendsString(final ClassInfo generalClassInfo) {
+        return generalClassInfo.getSuperclassName() == null ? "" : "extends " + generalClassInfo.getSuperclassName() + " ";
+    }
+
     private static void writeGeneralClass(final String outputBasePath, final ClassInfo generalClassInfo,
                                           final Set<FieldInfo> fieldInfos, final boolean makeSerializable) throws IOException {
         String generalClassName = generalClassInfo.getName();
@@ -202,6 +208,7 @@ public class GeneralClassesGeneratorImpl implements Generator {
         String classTemplate = getClassTemplate(generalClassInfo);
         String fieldsString = getFieldsString(classTemplate, generalClassInfo, fieldInfos);
         String implementsString = getImplementsString(generalClassInfo, makeSerializable);
+        String extendsString = getExtendsString(generalClassInfo);
         classTemplate = classTemplate.replace(PACKAGE_NAME_HOLDER, packageName);
         classTemplate = classTemplate.replace(CLASS_NAME_HOLDER, simpleClassName);
         classTemplate = classTemplate.replace(FIELDS_HOLDER, fieldsString);
@@ -209,6 +216,7 @@ public class GeneralClassesGeneratorImpl implements Generator {
         classTemplate = classTemplate.replace(DATA_ANNOTATION_HOLDER, generalClassInfo.isEnum() ? "" : "@Data");
         classTemplate = classTemplate.replace(IS_STATIC_HOLDER, generalClassInfo.isStatic() ? " static" : "");
         classTemplate = classTemplate.replace(IMPLEMENTS_HOLDER, implementsString);
+        classTemplate = classTemplate.replace(EXTENDS_HOLDER, extendsString);
         writeTemplateToFile(pathToClass, classTemplate, generalClassInfo);
     }
 

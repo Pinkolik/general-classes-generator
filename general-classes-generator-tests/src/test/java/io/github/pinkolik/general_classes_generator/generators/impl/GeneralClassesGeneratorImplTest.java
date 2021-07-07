@@ -27,64 +27,72 @@ class GeneralClassesGeneratorImplTest {
     private static final String VERSION_CLASSES_BASE_PATH =
             "src/main/java/io/github/pinkolik/general_classes_generator/test/general";
 
-    private void baseCompareTwoFilesTest(final String filename, final boolean makeSerializable)
+    private void baseCompareTwoFilesTest(final String[] filenames, final boolean makeSerializable)
             throws IOException, IllegalAccessException {
         Generator generator =
                 new GeneralClassesGeneratorImpl(VERSION_CLASSES_BASE_PATH, VERSION_REGEX_PATTERN, ACTUAL_PATH, makeSerializable);
-        String expected = FileUtils.readFileToString(new File(EXPECTED_PATH + filename), StandardCharsets.UTF_8);
-
         generator.generate();
 
-        String actual = FileUtils.readFileToString(new File(ACTUAL_PATH + BASE_PACKAGE_PATH + filename), StandardCharsets.UTF_8);
-        Assertions.assertEquals(expected, actual);
+        for (String filename : filenames) {
+            String expected = FileUtils.readFileToString(new File(EXPECTED_PATH + filename), StandardCharsets.UTF_8);
+
+            String actual =
+                    FileUtils.readFileToString(new File(ACTUAL_PATH + BASE_PACKAGE_PATH + filename), StandardCharsets.UTF_8);
+            Assertions.assertEquals(expected, actual);
+        }
     }
 
-    private void baseCompareTwoFilesTest(final String filename) throws IOException, IllegalAccessException {
-        baseCompareTwoFilesTest(filename, false);
+    private void baseCompareTwoFilesTest(final String[] filenames) throws IOException, IllegalAccessException {
+        baseCompareTwoFilesTest(filenames, false);
     }
 
     @Test
     void simpleFieldsMergeTest() throws IOException, IllegalAccessException {
-        baseCompareTwoFilesTest("Simple.java");
+        baseCompareTwoFilesTest(new String[] {"Simple.java"});
     }
 
     @Test
     void simpleEnumsMergeTest() throws IOException, IllegalAccessException {
-        baseCompareTwoFilesTest("Enum.java");
+        baseCompareTwoFilesTest(new String[] {"Enum.java"});
     }
 
     @Test
     void singleInnerClassTest() throws IOException, IllegalAccessException {
-        baseCompareTwoFilesTest("InnerClass.java");
+        baseCompareTwoFilesTest(new String[] {"InnerClass.java"});
     }
 
     @Test
     void emptyClassTest() throws IOException, IllegalAccessException {
-        baseCompareTwoFilesTest("Empty.java");
+        baseCompareTwoFilesTest(new String[] {"Empty.java"});
     }
 
     @Test
     void innerClassWithInnerEnumTest() throws IOException, IllegalAccessException {
-        baseCompareTwoFilesTest("InnerClassWithInnerEnum.java");
+        baseCompareTwoFilesTest(new String[] {"InnerClassWithInnerEnum.java"});
     }
 
     @Test
     void innerClassWithGenericFieldTest() throws IOException, IllegalAccessException {
-        baseCompareTwoFilesTest("InnerClassWithGenericField.java");
+        baseCompareTwoFilesTest(new String[] {"InnerClassWithGenericField.java"});
     }
 
     @Test
     void classWithSimpleConstantTest() throws IOException, IllegalAccessException {
-        baseCompareTwoFilesTest("ClassWithSimpleConstant.java");
+        baseCompareTwoFilesTest(new String[] {"ClassWithSimpleConstant.java"});
     }
 
     @Test
     void makeSerializableTrueTest() throws IOException, IllegalAccessException {
-        baseCompareTwoFilesTest("SerializableTestClass.java", true);
+        baseCompareTwoFilesTest(new String[] {"SerializableTestClass.java"}, true);
     }
 
     @Test
     void enumIsNotSerializableWhenMakeSerializableTrueTest() throws IOException, IllegalAccessException {
-        baseCompareTwoFilesTest("EnumIsNotSerializable.java", true);
+        baseCompareTwoFilesTest(new String[] {"EnumIsNotSerializable.java"}, true);
+    }
+
+    @Test
+    void inheritanceTest() throws IOException, IllegalAccessException {
+        baseCompareTwoFilesTest(new String[] {"InheritanceTestClass.java", "ParentClass.java"});
     }
 }
