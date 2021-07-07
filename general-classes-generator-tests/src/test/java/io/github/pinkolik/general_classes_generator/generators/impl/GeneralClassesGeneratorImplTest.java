@@ -95,4 +95,10 @@ class GeneralClassesGeneratorImplTest {
     void inheritanceTest() throws IOException, IllegalAccessException {
         baseCompareTwoFilesTest(new String[] {"InheritanceTestClass.java", "ParentClass.java"});
     }
+
+    @Test
+    void inheritanceWithMakeSerializableTest() throws IOException, IllegalAccessException {
+        baseCompareTwoFilesTest(new String[] {"InheritanceWithSerializableTestClass.java", "ParentWithSerializableClass.java"},
+                                true);
+    }
 }
