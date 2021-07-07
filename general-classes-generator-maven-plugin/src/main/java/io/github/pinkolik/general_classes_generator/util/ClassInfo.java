@@ -17,4 +17,6 @@ public class ClassInfo {
 
     private final boolean isStatic;
 
+    private final String superclassName;
+
 }
