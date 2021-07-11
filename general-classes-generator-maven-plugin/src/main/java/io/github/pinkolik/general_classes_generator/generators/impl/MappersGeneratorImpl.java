@@ -85,7 +85,7 @@ public class MappersGeneratorImpl implements Generator {
                                      final String outputBasePath) throws IOException {
         for (Map.Entry<ClassInfo, Set<Class<?>>> entry : generalClassInfoToVersionClassesMap.entrySet()) {
             ClassInfo generalClassInfo = entry.getKey();
-            if (generalClassInfo.isMember()) {
+            if (generalClassInfo.isMember() || generalClassInfo.isEnum()) {
                 continue;
             }
             String generalClassName = generalClassInfo.getName();

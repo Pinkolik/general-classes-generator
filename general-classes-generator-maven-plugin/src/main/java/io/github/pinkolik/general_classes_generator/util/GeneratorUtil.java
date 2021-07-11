@@ -162,7 +162,7 @@ public final class GeneratorUtil {
         Map<String, Set<ConverterInfo>> result = new TreeMap<>();
         for (Map.Entry<ClassInfo, Set<Class<?>>> entry : generalClassInfoToVersionClassesMap.entrySet()) {
             ClassInfo generalClassInfo = entry.getKey();
-            if (generalClassInfo.isMember()) {
+            if (generalClassInfo.isMember() || generalClassInfo.isEnum()) {
                 continue;
             }
             String generalClassName = generalClassInfo.getName();

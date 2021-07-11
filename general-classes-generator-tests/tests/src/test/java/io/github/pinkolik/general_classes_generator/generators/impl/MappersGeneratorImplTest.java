@@ -53,12 +53,11 @@ class MappersGeneratorImplTest {
         baseCompareTwoFilesTestForAllVersions(new String[] {"ParentClassMapper.java", "InheritanceTestClassMapper.java"});
     }
 
-    @Test
-    void mappersForInnerClassNotGeneratedTest() throws IOException, IllegalAccessException {
+    private void assertFilesNotGeneratedForAllVersions(final String filename) throws IOException, IllegalAccessException {
         //First delete if exist
         for (int i = 1; i < 4; i++) {
             String ver = String.format("ver%d/", i);
-            File file = new File(ACTUAL_PATH + BASE_PACKAGE_PATH + ver + "InnerClass/InnerMapper.java");
+            File file = new File(ACTUAL_PATH + BASE_PACKAGE_PATH + ver + filename);
             Files.deleteIfExists(file.toPath());
         }
 
@@ -67,8 +66,18 @@ class MappersGeneratorImplTest {
 
         for (int i = 1; i < 4; i++) {
             String ver = String.format("ver%d/", i);
-            File file = new File(ACTUAL_PATH + BASE_PACKAGE_PATH + ver + "InnerClass/InnerMapper.java");
+            File file = new File(ACTUAL_PATH + BASE_PACKAGE_PATH + ver + filename);
             Assertions.assertFalse(file.exists());
         }
+    }
+
+    @Test
+    void mappersForInnerClassNotGeneratedTest() throws IOException, IllegalAccessException {
+        assertFilesNotGeneratedForAllVersions("InnerClass/InnerMapper.java");
+    }
+
+    @Test
+    void mappersForEnumsNotGeneratedTest() throws IOException, IllegalAccessException {
+        assertFilesNotGeneratedForAllVersions("EnumMapper.java");
     }
 }
