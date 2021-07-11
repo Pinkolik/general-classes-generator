@@ -25,7 +25,7 @@ class GeneralClassesGeneratorImplTest {
     private static final String BASE_PACKAGE_PATH = "io/github/pinkolik/general_classes_generator/test/general/";
 
     private static final String VERSION_CLASSES_BASE_PATH =
-            "src/main/java/io/github/pinkolik/general_classes_generator/test/general";
+            "../test-classes/src/main/java/io/github/pinkolik/general_classes_generator/test/general";
 
     private void baseCompareTwoFilesTest(final String[] filenames, final boolean makeSerializable)
             throws IOException, IllegalAccessException {

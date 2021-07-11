@@ -2,5 +2,7 @@
 /general-classes-generator-conversion/target/
 /general-classes-generator-maven-plugin/target/
 /general-classes-generator-tests/target/
+/general-classes-generator-tests/tests/target/
+/general-classes-generator-tests/test-classes/target/
 /**/*.iml
-/general-classes-generator-tests/src/test/resources/actual/
+/general-classes-generator-tests/tests/src/test/resources/actual
