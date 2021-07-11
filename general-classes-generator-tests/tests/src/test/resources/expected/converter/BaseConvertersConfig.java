@@ -19,8 +19,6 @@ public class BaseConvertersConfig {
         Map<Class, BaseMapper> versionedClassesToMappers = new HashMap<>();
         generalClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.converter.Empty.class, io.github.pinkolik.general_classes_generator.test.converter.ver1.EmptyMapper.INSTANCE);
         versionedClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.converter.ver1.Empty.class, io.github.pinkolik.general_classes_generator.test.converter.ver1.EmptyMapper.INSTANCE);
-        generalClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.converter.Enum.class, io.github.pinkolik.general_classes_generator.test.converter.ver1.EnumMapper.INSTANCE);
-        versionedClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.converter.ver1.Enum.class, io.github.pinkolik.general_classes_generator.test.converter.ver1.EnumMapper.INSTANCE);
         generalClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.converter.InheritanceTestClass.class, io.github.pinkolik.general_classes_generator.test.converter.ver1.InheritanceTestClassMapper.INSTANCE);
         versionedClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.converter.ver1.InheritanceTestClass.class, io.github.pinkolik.general_classes_generator.test.converter.ver1.InheritanceTestClassMapper.INSTANCE);
         generalClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.converter.InnerClass.class, io.github.pinkolik.general_classes_generator.test.converter.ver1.InnerClassMapper.INSTANCE);
@@ -38,8 +36,6 @@ public class BaseConvertersConfig {
         Map<Class, BaseMapper> versionedClassesToMappers = new HashMap<>();
         generalClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.converter.Empty.class, io.github.pinkolik.general_classes_generator.test.converter.ver2.EmptyMapper.INSTANCE);
         versionedClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.converter.ver2.Empty.class, io.github.pinkolik.general_classes_generator.test.converter.ver2.EmptyMapper.INSTANCE);
-        generalClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.converter.Enum.class, io.github.pinkolik.general_classes_generator.test.converter.ver2.EnumMapper.INSTANCE);
-        versionedClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.converter.ver2.Enum.class, io.github.pinkolik.general_classes_generator.test.converter.ver2.EnumMapper.INSTANCE);
         generalClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.converter.InheritanceTestClass.class, io.github.pinkolik.general_classes_generator.test.converter.ver2.InheritanceTestClassMapper.INSTANCE);
         versionedClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.converter.ver2.InheritanceTestClass.class, io.github.pinkolik.general_classes_generator.test.converter.ver2.InheritanceTestClassMapper.INSTANCE);
         generalClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.converter.InnerClass.class, io.github.pinkolik.general_classes_generator.test.converter.ver2.InnerClassMapper.INSTANCE);
@@ -57,8 +53,6 @@ public class BaseConvertersConfig {
         Map<Class, BaseMapper> versionedClassesToMappers = new HashMap<>();
         generalClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.converter.Empty.class, io.github.pinkolik.general_classes_generator.test.converter.ver3.EmptyMapper.INSTANCE);
         versionedClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.converter.ver3.Empty.class, io.github.pinkolik.general_classes_generator.test.converter.ver3.EmptyMapper.INSTANCE);
-        generalClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.converter.Enum.class, io.github.pinkolik.general_classes_generator.test.converter.ver3.EnumMapper.INSTANCE);
-        versionedClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.converter.ver3.Enum.class, io.github.pinkolik.general_classes_generator.test.converter.ver3.EnumMapper.INSTANCE);
         generalClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.converter.InheritanceTestClass.class, io.github.pinkolik.general_classes_generator.test.converter.ver3.InheritanceTestClassMapper.INSTANCE);
         versionedClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.converter.ver3.InheritanceTestClass.class, io.github.pinkolik.general_classes_generator.test.converter.ver3.InheritanceTestClassMapper.INSTANCE);
         generalClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.converter.InnerClass.class, io.github.pinkolik.general_classes_generator.test.converter.ver3.InnerClassMapper.INSTANCE);
