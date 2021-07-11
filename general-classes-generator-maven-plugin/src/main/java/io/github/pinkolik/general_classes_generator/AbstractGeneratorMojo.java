@@ -3,6 +3,7 @@ package io.github.pinkolik.general_classes_generator;
 import io.github.pinkolik.general_classes_generator.generators.Generator;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
 
 import java.io.IOException;
 
@@ -14,17 +15,17 @@ import java.io.IOException;
 public abstract class AbstractGeneratorMojo extends AbstractMojo {
 
     @Override
-    public void execute() throws MojoExecutionException {
+    public void execute() throws MojoFailureException {
         Generator generator = createGenerator();
 
         try {
             generator.generate();
         }
         catch (IOException e) {
-            throw new MojoExecutionException("Couldn't modify files", e);
+            throw new MojoFailureException("Couldn't modify files", e);
         }
         catch (IllegalAccessException e) {
-            throw new MojoExecutionException("Couldn't access field", e);
+            throw new MojoFailureException("Couldn't access field", e);
         }
     }
 

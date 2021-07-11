@@ -25,7 +25,7 @@ class BaseConvertersConfigGeneratorImplTest {
     private static final String BASE_PACKAGE_PATH = "io/github/pinkolik/general_classes_generator/test/converter/";
 
     private static final String VERSION_CLASSES_BASE_PATH =
-            "src/main/java/io/github/pinkolik/general_classes_generator/test/converter";
+            "../test-classes/src/main/java/io/github/pinkolik/general_classes_generator/test/converter";
 
     private void baseCompareTwoFilesTest(final String filename) throws IOException, IllegalAccessException {
         Generator mappersGenerator = new MappersGeneratorImpl(VERSION_CLASSES_BASE_PATH, VERSION_REGEX_PATTERN, ACTUAL_PATH);
