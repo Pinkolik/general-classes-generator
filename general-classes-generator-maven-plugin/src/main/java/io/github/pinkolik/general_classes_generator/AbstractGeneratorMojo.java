@@ -2,10 +2,6 @@ package io.github.pinkolik.general_classes_generator;
 
 import io.github.pinkolik.general_classes_generator.generators.Generator;
 import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
-
-import java.io.IOException;
 
 /**
  * Abstract mojo for source generation using {@link Generator}.
@@ -15,17 +11,14 @@ import java.io.IOException;
 public abstract class AbstractGeneratorMojo extends AbstractMojo {
 
     @Override
-    public void execute() throws MojoFailureException {
+    public void execute() {
         Generator generator = createGenerator();
 
         try {
             generator.generate();
         }
-        catch (IOException e) {
-            throw new MojoFailureException("Couldn't modify files", e);
-        }
-        catch (IllegalAccessException e) {
-            throw new MojoFailureException("Couldn't access field", e);
+        catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
