@@ -6,3 +6,4 @@
 /general-classes-generator-tests/test-classes/target/
 /**/*.iml
 /general-classes-generator-tests/tests/src/test/resources/actual
+/general-classes-generator-tests/tests/src/main/java/

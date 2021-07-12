@@ -23,10 +23,10 @@ class MappersGeneratorImplTest {
 
     private static final String VERSION_REGEX_PATTERN = "ver\\d+";
 
-    private static final String BASE_PACKAGE_PATH = "io/github/pinkolik/general_classes_generator/test/mappers/";
+    private static final String BASE_PACKAGE_PATH = "io/github/pinkolik/general_classes_generator/test/";
 
     private static final String VERSION_CLASSES_BASE_PATH =
-            "../test-classes/src/main/java/io/github/pinkolik/general_classes_generator/test/mappers";
+            "../test-classes/src/main/java/io/github/pinkolik/general_classes_generator/test/";
 
     private void baseCompareTwoFilesTestForAllVersions(final String[] filenames) throws IOException, IllegalAccessException {
         Generator generator = new MappersGeneratorImpl(VERSION_CLASSES_BASE_PATH, VERSION_REGEX_PATTERN, ACTUAL_PATH);
@@ -53,31 +53,7 @@ class MappersGeneratorImplTest {
         baseCompareTwoFilesTestForAllVersions(new String[] {"ParentClassMapper.java", "InheritanceTestClassMapper.java"});
     }
 
-    private void assertFilesNotGeneratedForAllVersions(final String filename) throws IOException, IllegalAccessException {
-        //First delete if exist
-        for (int i = 1; i < 4; i++) {
-            String ver = String.format("ver%d/", i);
-            File file = new File(ACTUAL_PATH + BASE_PACKAGE_PATH + ver + filename);
-            Files.deleteIfExists(file.toPath());
-        }
-
-        Generator generator = new MappersGeneratorImpl(VERSION_CLASSES_BASE_PATH, VERSION_REGEX_PATTERN, ACTUAL_PATH);
-        generator.generate();
-
-        for (int i = 1; i < 4; i++) {
-            String ver = String.format("ver%d/", i);
-            File file = new File(ACTUAL_PATH + BASE_PACKAGE_PATH + ver + filename);
-            Assertions.assertFalse(file.exists());
-        }
-    }
-
-    @Test
-    void mappersForInnerClassNotGeneratedTest() throws IOException, IllegalAccessException {
-        assertFilesNotGeneratedForAllVersions("InnerClass/InnerMapper.java");
-    }
-
-    @Test
-    void mappersForEnumsNotGeneratedTest() throws IOException, IllegalAccessException {
-        assertFilesNotGeneratedForAllVersions("EnumMapper.java");
-    }
+    // TODO: 12.07.2021 enum mapper
+    // TODO: 12.07.2021 inner class mapper
+    // TODO: 12.07.2021 inner class with inner enum
 }

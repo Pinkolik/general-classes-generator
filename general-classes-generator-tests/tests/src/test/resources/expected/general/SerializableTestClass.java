@@ -1,4 +1,4 @@
-package io.github.pinkolik.general_classes_generator.test.general;
+package io.github.pinkolik.general_classes_generator.test;
 
 import lombok.Data;
 import lombok.Getter;
@@ -8,7 +8,7 @@ public class SerializableTestClass implements java.io.Serializable {
     //GENERATED FIELDS START
     private int a;
     private java.lang.String b;
-    private io.github.pinkolik.general_classes_generator.test.general.SerializableTestClass c;
+    private io.github.pinkolik.general_classes_generator.test.SerializableTestClass c;
     //GENERATED FIELDS END
     //GENERATED INNER CLASSES START
     //${inner_classes}
