@@ -49,18 +49,33 @@
         </developer>
     </developers>
 
+    <properties>
+        <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
+        <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
+    </properties>
+
     <dependencies>
+        <dependency>
+            <groupId>io.github.pinkolik</groupId>
+            <artifactId>general-classes-generator-conversion</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.pinkolik</groupId>
+            <artifactId>test-classes</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>io.github.pinkolik</groupId>
             <artifactId>general-classes-generator-maven-plugin</artifactId>
             <version>1.0.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
-            <groupId>io.github.pinkolik</groupId>
-            <artifactId>test-classes</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-            <scope>test</scope>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${org.mapstruct.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -91,5 +106,105 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>remove-old-classes</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <echo level="info">Deleting old classes</echo>
+                                <delete>
+                                    <fileset dir="src/main/java" includes="**/*"/>
+                                </delete>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>io.github.pinkolik</groupId>
+                <artifactId>general-classes-generator-maven-plugin</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+                <executions>
+                    <execution>
+                        <id>generate-general-classes</id>
+                        <goals>
+                            <goal>generate-general-classes</goal>
+                        </goals>
+                        <configuration>
+                            <versionClassesBasePath>
+                                ../test-classes/src/main/java/io/github/pinkolik/general_classes_generator/test/general
+                            </versionClassesBasePath>
+                            <versionRegexPattern>ver\d+</versionRegexPattern>
+                            <outputBasePath>src/main/java</outputBasePath>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>generate-mappers</id>
+                        <goals>
+                            <goal>generate-mappers</goal>
+                        </goals>
+                        <configuration>
+                            <versionClassesBasePath>
+                                ../test-classes/src/main/java/io/github/pinkolik/general_classes_generator/test/general
+                            </versionClassesBasePath>
+                            <versionRegexPattern>ver\d+</versionRegexPattern>
+                            <outputBasePath>src/main/java</outputBasePath>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>io.github.pinkolik</groupId>
+                        <artifactId>test-classes</artifactId>
+                        <version>1.0.0-SNAPSHOT</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <!-- See https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html -->
+                        <!-- Classpath elements to supply as annotation processor path. If specified, the compiler   -->
+                        <!-- will detect annotation processors only in those classpath elements. If omitted, the     -->
+                        <!-- default classpath is used to detect annotation processors. The detection itself depends -->
+                        <!-- on the configuration of annotationProcessors.                                           -->
+                        <!--                                                                                         -->
+                        <!-- According to this documentation, the provided dependency processor is not considered!   -->
+                        <annotationProcessorPaths>
+                            <path>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                                <version>${lombok.version}</version>
+                            </path>
+                            <path>
+                                <groupId>org.mapstruct</groupId>
+                                <artifactId>mapstruct-processor</artifactId>
+                                <version>${org.mapstruct.version}</version>
+                            </path>
+                            <path>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok-mapstruct-binding</artifactId>
+                                <version>${lombok-mapstruct-binding.version}</version>
+                            </path>
+                        </annotationProcessorPaths>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 
 </project>

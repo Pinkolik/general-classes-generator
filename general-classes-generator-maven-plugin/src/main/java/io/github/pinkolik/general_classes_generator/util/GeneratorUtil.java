@@ -98,6 +98,25 @@ public final class GeneratorUtil {
         return fields;
     }
 
+    public static String getGeneralTypeName(final Pattern versionRegexPattern, final Field field, final Type type) {
+        String genericTypeName;
+        if (type instanceof Class) {
+            genericTypeName = ((Class<?>) type).getCanonicalName();
+        }
+        else if (type instanceof ParameterizedType) {
+            genericTypeName = type.getTypeName().replace("$", ".");
+        }
+        else {
+            genericTypeName = field.getGenericType().getTypeName();
+        }
+        Matcher versionMatcher = versionRegexPattern.matcher(genericTypeName);
+        if (versionMatcher.find()) {
+            String version = versionMatcher.group(0);
+            genericTypeName = genericTypeName.replace("." + version, "");
+        }
+        return genericTypeName;
+    }
+
     private static Set<FieldInfo> getFieldInfosForClass(final Pattern versionRegexPattern, final Class<?> aClass)
             throws IllegalAccessException {
         Field[] fields = aClass.getDeclaredFields();
@@ -107,21 +126,7 @@ public final class GeneratorUtil {
                 continue;
             }
             Type type = field.getGenericType();
-            String genericTypeName;
-            if (type instanceof Class) {
-                genericTypeName = ((Class<?>) type).getCanonicalName();
-            }
-            else if (type instanceof ParameterizedType) {
-                genericTypeName = type.getTypeName().replace("$", ".");
-            }
-            else {
-                genericTypeName = field.getGenericType().getTypeName();
-            }
-            Matcher versionMatcher = versionRegexPattern.matcher(genericTypeName);
-            if (versionMatcher.find()) {
-                String version = versionMatcher.group(0);
-                genericTypeName = genericTypeName.replace("." + version, "");
-            }
+            String genericTypeName = getGeneralTypeName(versionRegexPattern, field, type);
             boolean isStatic = Modifier.isStatic(field.getModifiers());
             boolean isFinal = Modifier.isFinal(field.getModifiers());
             Object staticFinalValue = null;
@@ -130,7 +135,7 @@ public final class GeneratorUtil {
                 staticFinalValue = field.get(null);
             }
             FieldInfo fieldInfo =
-                    new FieldInfo(field.getName(), genericTypeName, isStatic, isFinal, aClass.isEnum(), staticFinalValue);
+                    new FieldInfo(field.getName(), genericTypeName, isStatic, isFinal, field.isEnumConstant(), staticFinalValue);
             fieldInfos.add(fieldInfo);
         }
         return fieldInfos;
@@ -162,9 +167,6 @@ public final class GeneratorUtil {
         Map<String, Set<ConverterInfo>> result = new TreeMap<>();
         for (Map.Entry<ClassInfo, Set<Class<?>>> entry : generalClassInfoToVersionClassesMap.entrySet()) {
             ClassInfo generalClassInfo = entry.getKey();
-            if (generalClassInfo.isMember() || generalClassInfo.isEnum()) {
-                continue;
-            }
             String generalClassName = generalClassInfo.getName();
             Set<Class<?>> classes = entry.getValue();
             for (Class<?> aClass : classes) {
