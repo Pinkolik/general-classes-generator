@@ -1,4 +1,4 @@
-package io.github.pinkolik.general_classes_generator.test.general;
+package io.github.pinkolik.general_classes_generator.test;
 
 import lombok.Data;
 import lombok.Getter;
@@ -8,8 +8,8 @@ public class InnerClassWithInnerEnum {
     //GENERATED FIELDS START
     private int a;
     private java.lang.String b;
-    private io.github.pinkolik.general_classes_generator.test.general.InnerClassWithInnerEnum.InnerClassWithEnum c;
-    private io.github.pinkolik.general_classes_generator.test.general.InnerClassWithInnerEnum.InnerClassWithEnum.InnerEnum d;
+    private io.github.pinkolik.general_classes_generator.test.InnerClassWithInnerEnum.InnerClassWithEnum c;
+    private io.github.pinkolik.general_classes_generator.test.InnerClassWithInnerEnum.InnerClassWithEnum.InnerEnum d;
     //GENERATED FIELDS END
     //GENERATED INNER CLASSES START
     @Data
@@ -17,8 +17,8 @@ public class InnerClassWithInnerEnum {
         //GENERATED FIELDS START
         private int innerA;
         private java.lang.String innerB;
-        private io.github.pinkolik.general_classes_generator.test.general.InnerClassWithInnerEnum.InnerClassWithEnum innerC;
-        private io.github.pinkolik.general_classes_generator.test.general.InnerClassWithInnerEnum.InnerClassWithEnum.InnerEnum innerD;
+        private io.github.pinkolik.general_classes_generator.test.InnerClassWithInnerEnum.InnerClassWithEnum innerC;
+        private io.github.pinkolik.general_classes_generator.test.InnerClassWithInnerEnum.InnerClassWithEnum.InnerEnum innerD;
         //GENERATED FIELDS END
         //GENERATED INNER CLASSES START
 

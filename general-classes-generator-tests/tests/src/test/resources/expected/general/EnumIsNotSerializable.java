@@ -1,4 +1,4 @@
-package io.github.pinkolik.general_classes_generator.test.general;
+package io.github.pinkolik.general_classes_generator.test;
 
 import lombok.Data;
 import lombok.Getter;

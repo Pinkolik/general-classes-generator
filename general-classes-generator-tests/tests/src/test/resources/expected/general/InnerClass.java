@@ -1,4 +1,4 @@
-package io.github.pinkolik.general_classes_generator.test.general;
+package io.github.pinkolik.general_classes_generator.test;
 
 import lombok.Data;
 import lombok.Getter;
@@ -6,7 +6,7 @@ import lombok.Getter;
 @Data
 public class InnerClass {
     //GENERATED FIELDS START
-    private io.github.pinkolik.general_classes_generator.test.general.InnerClass.Inner inner;
+    private io.github.pinkolik.general_classes_generator.test.InnerClass.Inner inner;
     //GENERATED FIELDS END
     //GENERATED INNER CLASSES START
     @Data
@@ -14,7 +14,7 @@ public class InnerClass {
         //GENERATED FIELDS START
         private java.lang.String a;
         private int b;
-        private io.github.pinkolik.general_classes_generator.test.general.InnerClass.Inner c;
+        private io.github.pinkolik.general_classes_generator.test.InnerClass.Inner c;
         //GENERATED FIELDS END
         //GENERATED INNER CLASSES START
         //${inner_classes}

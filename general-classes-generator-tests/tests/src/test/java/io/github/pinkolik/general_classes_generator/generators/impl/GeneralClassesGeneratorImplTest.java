@@ -22,10 +22,10 @@ class GeneralClassesGeneratorImplTest {
 
     private static final String VERSION_REGEX_PATTERN = "ver\\d+";
 
-    private static final String BASE_PACKAGE_PATH = "io/github/pinkolik/general_classes_generator/test/general/";
+    private static final String BASE_PACKAGE_PATH = "io/github/pinkolik/general_classes_generator/test/";
 
     private static final String VERSION_CLASSES_BASE_PATH =
-            "../test-classes/src/main/java/io/github/pinkolik/general_classes_generator/test/general";
+            "../test-classes/src/main/java/io/github/pinkolik/general_classes_generator/test/";
 
     private void baseCompareTwoFilesTest(final String[] filenames, final boolean makeSerializable)
             throws IOException, IllegalAccessException {

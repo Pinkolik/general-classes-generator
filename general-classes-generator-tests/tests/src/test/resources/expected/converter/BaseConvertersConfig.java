@@ -1,4 +1,4 @@
-package io.github.pinkolik.general_classes_generator.test.converter;
+package io.github.pinkolik.general_classes_generator.test;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
