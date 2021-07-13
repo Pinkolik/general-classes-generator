@@ -2,6 +2,7 @@ package io.github.pinkolik.general_classes_generator.test;
 
 import lombok.Data;
 import lombok.Getter;
+import lombok.EqualsAndHashCode;
 
 @Data
 public class Simple {
