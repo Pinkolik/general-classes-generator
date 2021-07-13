@@ -35,7 +35,9 @@ public class GeneralClassesGeneratorImpl implements Generator {
 
     private static final String INNER_CLASSES_HOLDER = "//${inner_classes}";
 
-    private static final String DATA_ANNOTATION_HOLDER = "${data_annotation}";
+    private static final String DATA_ANNOTATION_HOLDER = "${data_annotation}\n";
+
+    private static final String EQUALS_AND_HASHCODE_ANNOTATION_HOLDER = "${equals_and_hashcode_annotation}\n";
 
     private static final String IMPLEMENTS_HOLDER = "${implements}";
 
@@ -213,7 +215,9 @@ public class GeneralClassesGeneratorImpl implements Generator {
         classTemplate = classTemplate.replace(CLASS_NAME_HOLDER, simpleClassName);
         classTemplate = classTemplate.replace(FIELDS_HOLDER, fieldsString);
         classTemplate = classTemplate.replace(TYPE_HOLDER, generalClassInfo.isEnum() ? "enum" : "class");
-        classTemplate = classTemplate.replace(DATA_ANNOTATION_HOLDER, generalClassInfo.isEnum() ? "" : "@Data");
+        classTemplate = classTemplate.replace(DATA_ANNOTATION_HOLDER, generalClassInfo.isEnum() ? "" : "@Data\n");
+        classTemplate = classTemplate.replace(EQUALS_AND_HASHCODE_ANNOTATION_HOLDER, generalClassInfo.getSuperclassName() ==
+                                                                                             null ? "" : "@EqualsAndHashCode(callSuper = true)\n");
         classTemplate = classTemplate.replace(IS_STATIC_HOLDER, generalClassInfo.isStatic() ? " static" : "");
         classTemplate = classTemplate.replace(IMPLEMENTS_HOLDER, implementsString);
         classTemplate = classTemplate.replace(EXTENDS_HOLDER, extendsString);
