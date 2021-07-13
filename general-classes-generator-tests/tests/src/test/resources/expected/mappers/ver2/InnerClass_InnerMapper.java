@@ -1,4 +1,4 @@
-package io.github.pinkolik.general_classes_generator.test.ver2;
+package io.github.pinkolik.general_classes_generator.test.mappers.ver2;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

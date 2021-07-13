@@ -73,6 +73,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>5.3.8</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
             <version>${org.mapstruct.version}</version>
@@ -158,7 +164,25 @@
                                 ../test-classes/src/main/java/io/github/pinkolik/general_classes_generator/test
                             </versionClassesBasePath>
                             <versionRegexPattern>ver\d+</versionRegexPattern>
-                            <outputBasePath>src/main/java</outputBasePath>
+                            <outputBasePath>src/main/java/io/github/pinkolik/general_classes_generator/test/mappers</outputBasePath>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>generate-base-converters-config</id>
+                        <goals>
+                            <goal>generate-base-converters-config</goal>
+                        </goals>
+                        <configuration>
+                            <versionClassesBasePath>
+                                ../test-classes/src/main/java/io/github/pinkolik/general_classes_generator/test
+                            </versionClassesBasePath>
+                            <versionRegexPattern>ver\d+</versionRegexPattern>
+                            <mappersBasePath>
+                                src/main/java/io/github/pinkolik/general_classes_generator/test/mappers
+                            </mappersBasePath>
+                            <outputPath>
+                                src/main/java/io/github/pinkolik/general_classes_generator/test/converter
+                            </outputPath>
                         </configuration>
                     </execution>
                 </executions>
