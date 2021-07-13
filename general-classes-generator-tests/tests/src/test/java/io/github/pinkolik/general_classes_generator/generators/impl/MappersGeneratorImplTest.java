@@ -16,13 +16,12 @@ class MappersGeneratorImplTest {
 
     private final Logger log = LoggerFactory.getLogger(MappersGeneratorImplTest.class);
 
-    private static final String ACTUAL_PATH = "src/test/resources/actual/src/main/java/";
+    private static final String ACTUAL_PATH =
+            "src/test/resources/actual/src/main/java/io/github/pinkolik/general_classes_generator/test/mappers/";
 
     private static final String EXPECTED_PATH = "src/test/resources/expected/mappers/";
 
     private static final String VERSION_REGEX_PATTERN = "ver\\d+";
-
-    private static final String BASE_PACKAGE_PATH = "io/github/pinkolik/general_classes_generator/test/";
 
     private static final String VERSION_CLASSES_BASE_PATH =
             "../test-classes/src/main/java/io/github/pinkolik/general_classes_generator/test/";
@@ -35,8 +34,7 @@ class MappersGeneratorImplTest {
                 String ver = String.format("ver%d/", i);
                 String expected = FileUtils.readFileToString(new File(EXPECTED_PATH + ver + filename), StandardCharsets.UTF_8);
 
-                String actual = FileUtils
-                        .readFileToString(new File(ACTUAL_PATH + BASE_PACKAGE_PATH + ver + filename), StandardCharsets.UTF_8);
+                String actual = FileUtils.readFileToString(new File(ACTUAL_PATH + ver + filename), StandardCharsets.UTF_8);
                 Assertions.assertEquals(expected, actual);
             }
         }

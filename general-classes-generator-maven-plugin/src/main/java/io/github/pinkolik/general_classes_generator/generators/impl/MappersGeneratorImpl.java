@@ -11,9 +11,12 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -88,9 +91,23 @@ public class MappersGeneratorImpl implements Generator {
         this.outputBasePath = outputBasePath;
     }
 
-    private static String getPathToMapper(final String mappersBasePath, final Class<?> aClass) {
-        return mappersBasePath + File.separator +
-                (aClass.getName().replace("$", "_") + GeneratorUtil.MAPPER_POSTFIX).replace(".", File.separator) + ".java";
+    private static String getPathToMapper(final String mappersBasePath, final Pattern versionRegexPattern,
+                                          final Class<?> aClass) {
+        Matcher matcher = versionRegexPattern.matcher(aClass.getName());
+        String version;
+        if (matcher.find()) {
+            version = matcher.group(0);
+        }
+        else {
+            throw new IllegalArgumentException(
+                    String.format("Couldn't find version group for class %s using regex %s", aClass.getName(),
+                                  versionRegexPattern.pattern()));
+        }
+        String className = aClass.getName();
+        className = className.substring(className.lastIndexOf(".") + 1);
+        Path pathToMapper =
+                Paths.get(mappersBasePath, version, className.replace("$", "_") + GeneratorUtil.MAPPER_POSTFIX + ".java");
+        return pathToMapper.toString();
     }
 
     private static String getAdditionalMappingsString(final Class<?> aClass, final Pattern versionRegexPattern)
@@ -139,8 +156,9 @@ public class MappersGeneratorImpl implements Generator {
             Set<Class<?>> classes = entry.getValue();
             for (Class<?> aClass : classes) {
                 String mapperName = GeneratorUtil.getMapperName(aClass);
-                String packageName = aClass.getPackage().getName();
-                String pathToMapper = getPathToMapper(outputBasePath, aClass);
+                String pathToMapper = getPathToMapper(outputBasePath, versionRegexPattern, aClass);
+                String packageName = GeneratorUtil.convertPathToClassToClassName(pathToMapper);
+                packageName = packageName.substring(0, packageName.lastIndexOf("."));
                 String mapperTemplate = IOUtils.resourceToString(MAPPER_TEMPLATE_PATH, StandardCharsets.UTF_8,
                                                                  MappersGeneratorImpl.class.getClassLoader());
                 mapperTemplate = mapperTemplate.replace(PACKAGE_NAME_HOLDER, packageName);
