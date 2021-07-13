@@ -158,6 +158,11 @@ public final class GeneratorUtil {
         return result;
     }
 
+    public static String getMapperName(final Class<?> aClass) {
+        String mapperName = aClass.getName().replace("$", "_") + GeneratorUtil.MAPPER_POSTFIX;
+        return mapperName.substring(mapperName.lastIndexOf(".") + 1);
+    }
+
     public static Map<String, Set<ConverterInfo>> buildVersionToConverterInfoMap(final String versionClassesBasePath,
                                                                                  final Pattern versionRegexPattern,
                                                                                  final String mappersBasePath) {
@@ -167,7 +172,7 @@ public final class GeneratorUtil {
         Map<String, Set<ConverterInfo>> result = new TreeMap<>();
         for (Map.Entry<ClassInfo, Set<Class<?>>> entry : generalClassInfoToVersionClassesMap.entrySet()) {
             ClassInfo generalClassInfo = entry.getKey();
-            String generalClassName = generalClassInfo.getName();
+            String generalClassName = generalClassInfo.getName().replace("$", ".");
             Set<Class<?>> classes = entry.getValue();
             for (Class<?> aClass : classes) {
                 Matcher versionMatcher = versionRegexPattern.matcher(aClass.getCanonicalName());
@@ -178,7 +183,7 @@ public final class GeneratorUtil {
                 else {
                     throw new IllegalArgumentException("Wrong version regex.");
                 }
-                String mapperSimpleName = aClass.getSimpleName() + MAPPER_POSTFIX;
+                String mapperSimpleName = getMapperName(aClass);
                 //@formatter:off
                 String mapperClassName = mapperFiles.stream()
                                               .filter(f ->

@@ -93,11 +93,6 @@ public class MappersGeneratorImpl implements Generator {
                 (aClass.getName().replace("$", "_") + GeneratorUtil.MAPPER_POSTFIX).replace(".", File.separator) + ".java";
     }
 
-    private static String getMapperName(final Class<?> aClass) {
-        String mapperName = aClass.getName().replace("$", "_") + GeneratorUtil.MAPPER_POSTFIX;
-        return mapperName.substring(mapperName.lastIndexOf(".") + 1);
-    }
-
     private static String getAdditionalMappingsString(final Class<?> aClass, final Pattern versionRegexPattern)
             throws IOException {
         String enumMappingTemplate = IOUtils.resourceToString(ENUM_MAPPING_TEMPLATE_PATH, StandardCharsets.UTF_8,
@@ -127,7 +122,7 @@ public class MappersGeneratorImpl implements Generator {
         StringBuilder sb = new StringBuilder();
         for (Class<?> declaredClass : aClass.getDeclaredClasses()) {
             //@formatter:off
-            sb.append(getMapperName(declaredClass))
+            sb.append(GeneratorUtil.getMapperName(declaredClass))
               .append(".class, ")
               .append(getAdditionalMappersString(declaredClass))
               .append(", ");
@@ -143,7 +138,7 @@ public class MappersGeneratorImpl implements Generator {
             String generalClassName = generalClassInfo.getName();
             Set<Class<?>> classes = entry.getValue();
             for (Class<?> aClass : classes) {
-                String mapperName = getMapperName(aClass);
+                String mapperName = GeneratorUtil.getMapperName(aClass);
                 String packageName = aClass.getPackage().getName();
                 String pathToMapper = getPathToMapper(outputBasePath, aClass);
                 String mapperTemplate = IOUtils.resourceToString(MAPPER_TEMPLATE_PATH, StandardCharsets.UTF_8,

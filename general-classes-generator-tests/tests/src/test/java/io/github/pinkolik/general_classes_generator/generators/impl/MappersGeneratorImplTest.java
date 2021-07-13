@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 
 class MappersGeneratorImplTest {
 
@@ -53,7 +52,21 @@ class MappersGeneratorImplTest {
         baseCompareTwoFilesTestForAllVersions(new String[] {"ParentClassMapper.java", "InheritanceTestClassMapper.java"});
     }
 
-    // TODO: 12.07.2021 enum mapper
-    // TODO: 12.07.2021 inner class mapper
-    // TODO: 12.07.2021 inner class with inner enum
+    @Test
+    void enumMapperGeneratedTest() throws IOException, IllegalAccessException {
+        baseCompareTwoFilesTestForAllVersions(new String[] {"EnumMapper.java"});
+    }
+
+    @Test
+    void innerClassMapperGeneratedTest() throws IOException, IllegalAccessException {
+        baseCompareTwoFilesTestForAllVersions(new String[] {"InnerClassMapper.java", "InnerClass_InnerMapper.java"});
+    }
+
+    @Test
+    void innerClassWithInnerEnumGeneratedTest() throws IOException, IllegalAccessException {
+        baseCompareTwoFilesTestForAllVersions(
+                new String[] {"InnerClassWithInnerEnumMapper.java", "InnerClassWithInnerEnum_InnerClassWithEnumMapper.java",
+                              "InnerClassWithInnerEnum_InnerClassWithEnum_InnerEnumMapper.java"});
+    }
+
 }
