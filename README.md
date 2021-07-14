@@ -138,9 +138,11 @@ package mypackage.general;
 
 import lombok.Data;
 import lombok.Getter;
+import lombok.EqualsAndHashCode;
+import io.github.pinkolik.general_classes_generator.conversion.Generalized;
 
 @Data
-public class Dog {
+public class Dog implements Generalized {
 
     //GENERATED FIELDS START
     private int age;
@@ -151,7 +153,7 @@ public class Dog {
     //GENERATED FIELDS END
     //GENERATED INNER CLASSES START
 
-    public static enum Breed {
+    public static enum Breed implements Generalized {
         //GENERATED FIELDS START
         HUSKY,
         POMERANIAN,
@@ -177,9 +179,9 @@ package mypackage.mappers.ver1;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-import BaseMapper;
+import io.github.pinkolik.general_classes_generator.conversion.BaseMapper;
 
-@Mapper
+@Mapper(uses = {})
 public interface DogMapper extends BaseMapper<mypackage.ver1.Dog, mypackage.general.Dog> {
 
     DogMapper INSTANCE = Mappers.getMapper(DogMapper.class);
@@ -187,9 +189,12 @@ public interface DogMapper extends BaseMapper<mypackage.ver1.Dog, mypackage.gene
 }
 ```
 
-BaseMapper interface looks like [this](http://www.example.com).
+BaseMapper interface looks
+like [this](https://github.com/Pinkolik/general-classes-generator/blob/main/general-classes-generator-conversion/src/main/java/io/github/pinkolik/general_classes_generator/conversion/BaseMapper.java)
+.
 
-This plugin also generates a spring configuration for [BaseConverter](http://example.com)
+This plugin also generates a spring configuration
+for [BaseConverter](https://github.com/Pinkolik/general-classes-generator/blob/main/general-classes-generator-conversion/src/main/java/io/github/pinkolik/general_classes_generator/conversion/BaseConverter.java)
 which is useful, when you need a universal tool to convert any class from a package. So you don't have to look for a concrete
 mapper, you can just use this converter.
 
@@ -241,7 +246,7 @@ Add this to your pom.xml.
             <plugin>
                 <groupId>io.github.pinkolik</groupId>
                 <artifactId>general-classes-generator-maven-plugin</artifactId>
-                <version>0.2.0-RELEASE</version>
+                <version>1.0.0-RELEASE</version>
                 <executions>
                     <execution>
                         <id>generate-general-classes</id>
@@ -254,8 +259,9 @@ Add this to your pom.xml.
                             </versionClassesBasePath>
                             <versionRegexPattern>ver\d+</versionRegexPattern>
                             <outputBasePath>
-                                ${project.parent.basedir}/general-classes/src/main/java/com/my/package/general
+                                ${project.parent.basedir}/general-classes/src/main/java
                             </outputBasePath>
+                           <makeSerializable>true</makeSerializable>
                         </configuration>
                     </execution>
                 </executions>
@@ -287,6 +293,8 @@ Add this to your pom.xml.
     ...
     <properties>
         <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
+        <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
+        <lombok.version>1.18.20</lombok.version>
     </properties>
     ...
     <dependencies>
@@ -294,12 +302,18 @@ Add this to your pom.xml.
         <dependency>
             <groupId>io.github.pinkolik</groupId>
             <artifactId>general-classes-generator-conversion</artifactId>
-            <version>0.2.0-RELEASE</version>
+            <version>1.0.0-RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
             <version>${org.mapstruct.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
         </dependency>
         ...
     </dependencies>
@@ -311,7 +325,7 @@ Add this to your pom.xml.
             <plugin>
                 <groupId>io.github.pinkolik</groupId>
                 <artifactId>general-classes-generator-maven-plugin</artifactId>
-                <version>0.2.0-RELEASE</version>
+                <version>1.0.0-RELEASE</version>
                 <executions>
                     <execution>
                         <id>generate-mappers</id>
@@ -338,25 +352,42 @@ Add this to your pom.xml.
                     </dependency>
                 </dependencies>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <source>11</source> <!-- depending on your project -->
-                    <target>11</target> <!-- depending on your project -->
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.mapstruct</groupId>
-                            <artifactId>mapstruct-processor</artifactId>
-                            <version>${org.mapstruct.version}</version>
-                        </path>
-                        <!-- other annotation processors -->
-                    </annotationProcessorPaths>
-                </configuration>
-            </plugin>
             ...
         </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <!-- See https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html -->
+                        <!-- Classpath elements to supply as annotation processor path. If specified, the compiler   -->
+                        <!-- will detect annotation processors only in those classpath elements. If omitted, the     -->
+                        <!-- default classpath is used to detect annotation processors. The detection itself depends -->
+                        <!-- on the configuration of annotationProcessors.                                           -->
+                        <!--                                                                                         -->
+                        <!-- According to this documentation, the provided dependency processor is not considered!   -->
+                        <annotationProcessorPaths>
+                            <path>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                                <version>${lombok.version}</version>
+                            </path>
+                            <path>
+                                <groupId>org.mapstruct</groupId>
+                                <artifactId>mapstruct-processor</artifactId>
+                                <version>${org.mapstruct.version}</version>
+                            </path>
+                            <path>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok-mapstruct-binding</artifactId>
+                                <version>${lombok-mapstruct-binding.version}</version>
+                            </path>
+                        </annotationProcessorPaths>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         ...
     </build>
     ...
@@ -378,7 +409,7 @@ Add this to your pom.xml.
         <dependency>
             <groupId>io.github.pinkolik</groupId>
             <artifactId>general-classes-generator-conversion</artifactId>
-            <version>0.2.0-RELEASE</version>
+            <version>1.0.0-RELEASE</version>
         </dependency>
         ...
     </dependencies>
@@ -390,7 +421,7 @@ Add this to your pom.xml.
             <plugin>
                 <groupId>io.github.pinkolik</groupId>
                 <artifactId>general-classes-generator-maven-plugin</artifactId>
-                <version>0.2.0-RELEASE</version>
+                <version>1.0.0-RELEASE</version>
                 <executions>
                     <execution>
                         <id>generate-base-converters-config</id>
@@ -506,10 +537,10 @@ Project Link: [https://github.com/Pinkolik/general-classes-generator](https://gi
 
 [maven-central-plugin-shield]: https://img.shields.io/maven-central/v/io.github.pinkolik/general-classes-generator-maven-plugin?color=success&label=general-classes-generator-maven-plugin&style=plastic
 
-[maven-central-plugin-url]: https://search.maven.org/artifact/io.github.pinkolik/general-classes-generator-maven-plugin/0.2.0-RELEASE/maven-plugin
+[maven-central-plugin-url]: https://search.maven.org/artifact/io.github.pinkolik/general-classes-generator-maven-plugin/1.0.0-RELEASE/maven-plugin
 
 [maven-central-conversion-shield]: https://img.shields.io/maven-central/v/io.github.pinkolik/general-classes-generator-conversion?color=success&label=general-classes-generator-conversion&style=plastic
 
-[maven-central-conversion-url]: https://search.maven.org/artifact/io.github.pinkolik/general-classes-generator-conversion/0.2.0-RELEASE/jar
+[maven-central-conversion-url]: https://search.maven.org/artifact/io.github.pinkolik/general-classes-generator-conversion/1.0.0-RELEASE/jar
 
 [build-badge-url]: https://github.com/Pinkolik/general-classes-generator/actions/workflows/maven-publish.yml/badge.svg

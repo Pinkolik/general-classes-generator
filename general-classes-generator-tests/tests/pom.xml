@@ -159,6 +159,7 @@
                             </versionClassesBasePath>
                             <versionRegexPattern>ver\d+</versionRegexPattern>
                             <outputBasePath>src/main/java</outputBasePath>
+                            <makeSerializable>true</makeSerializable>
                         </configuration>
                     </execution>
                     <execution>
