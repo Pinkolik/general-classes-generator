@@ -1,6 +1,7 @@
 package io.github.pinkolik.general_classes_generator.conversion.impl;
 
 import io.github.pinkolik.general_classes_generator.conversion.BaseConverter;
+import io.github.pinkolik.general_classes_generator.conversion.Generalized;
 import io.github.pinkolik.general_classes_generator.test.InnerClassWithGenericField;
 import io.github.pinkolik.general_classes_generator.test.Simple;
 import io.github.pinkolik.general_classes_generator.test.UpcastingTestClass;
@@ -23,6 +24,8 @@ public class BaseConverterImplTest {
     @Autowired
     @Qualifier("baseConverterVer1")
     private BaseConverter baseConverterVer1;
+
+    public static class ClassWithoutMapper implements Generalized {}
 
     /*********************************************
      * 1. Wrong package test                      *
@@ -108,7 +111,23 @@ public class BaseConverterImplTest {
 
     @Test
     void mapperNotFoundIsThrownGeneralToVersionedTest() {
-        // TODO: 14.07.2021 complete after adding Generalized interface
+        ClassWithoutMapper obj = new ClassWithoutMapper();
+
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+                                    baseConverterVer1.convertToVersionedClass(obj);
+                                },
+                                "Mapper for class io.github.pinkolik.general_classes_generator.conversion.impl.BaseConverterImplTest.ClassWithoutMapper not found");
+    }
+
+    @Test
+    void onlyGeneralizedAllowedIsThrownGeneralToVersionedTest() {
+        io.github.pinkolik.general_classes_generator.test.ver2.Simple simple =
+                new io.github.pinkolik.general_classes_generator.test.ver2.Simple();
+        simple.setB(10);
+
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            baseConverterVer1.convertToVersionedClass(simple);
+        }, "Only classes implementing io.github.pinkolik.general_classes_generator.conversion.Generalized are allowed.");
     }
 
     @Test

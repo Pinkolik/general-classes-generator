@@ -3,6 +3,7 @@ package io.github.pinkolik.general_classes_generator.conversion.impl;
 
 import io.github.pinkolik.general_classes_generator.conversion.BaseConverter;
 import io.github.pinkolik.general_classes_generator.conversion.BaseMapper;
+import io.github.pinkolik.general_classes_generator.conversion.Generalized;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -41,6 +42,13 @@ public class BaseConverterImpl implements BaseConverter {
     public Object convertToVersionedClass(final Object general) {
         if (general == null) {
             return null;
+        }
+        if (!(general instanceof Generalized)) {
+            throw new IllegalArgumentException(
+                    "Only classes implementing io.github.pinkolik.general_classes_generator.conversion.Generalized are allowed.");
+        }
+        if (!generalClassesToMappers.containsKey(general.getClass())) {
+            throw new IllegalArgumentException(String.format("Mapper for class %s not found", general.getClass()));
         }
         Object versionedClass = generalClassesToMappers.get(general.getClass()).mapGeneralToVersioned(general);
         return mapSubclassesToVersionedClasses(versionedClass);
