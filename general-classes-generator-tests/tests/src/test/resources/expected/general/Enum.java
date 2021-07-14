@@ -3,8 +3,9 @@ package io.github.pinkolik.general_classes_generator.test;
 import lombok.Data;
 import lombok.Getter;
 import lombok.EqualsAndHashCode;
+import io.github.pinkolik.general_classes_generator.conversion.Generalized;
 
-public enum Enum {
+public enum Enum implements Generalized {
     //GENERATED FIELDS START
     A,
     B,

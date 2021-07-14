@@ -191,10 +191,12 @@ public class GeneralClassesGeneratorImpl implements Generator {
     }
 
     private static String getImplementsString(final ClassInfo generalClassInfo, final boolean makeSerializable) {
-        if (generalClassInfo.isEnum()) {
-            return "";
+        List<String> interfaces = new ArrayList<>();
+        interfaces.add("Generalized");
+        if (makeSerializable && !generalClassInfo.isEnum()) {
+            interfaces.add("java.io.Serializable");
         }
-        return makeSerializable ? "implements java.io.Serializable " : "";
+        return String.format("implements %s ", String.join(", ", interfaces));
     }
 
     private static String getExtendsString(final ClassInfo generalClassInfo) {
