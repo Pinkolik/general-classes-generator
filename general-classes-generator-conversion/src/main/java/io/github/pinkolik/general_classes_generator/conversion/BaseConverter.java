@@ -8,7 +8,8 @@ package io.github.pinkolik.general_classes_generator.conversion;
 public interface BaseConverter {
 
     /**
-     * Convert general class to versioned.
+     * Convert general class to versioned. This method accepts only
+     * objects that implement {@link Generalized} interface.
      * @param general general class.
      * @return versioned class.
      */
