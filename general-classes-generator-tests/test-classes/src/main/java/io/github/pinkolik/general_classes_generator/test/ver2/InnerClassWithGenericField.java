@@ -12,5 +12,7 @@ public class InnerClassWithGenericField {
     @Data
     public static class Inner {
 
+        private int b;
+
     }
 }

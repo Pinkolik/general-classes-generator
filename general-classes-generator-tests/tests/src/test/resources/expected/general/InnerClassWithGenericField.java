@@ -15,7 +15,9 @@ public class InnerClassWithGenericField {
     @Data
     public static class Inner {
         //GENERATED FIELDS START
-
+        private java.lang.String a;
+        private int b;
+        private io.github.pinkolik.general_classes_generator.test.InnerClassWithGenericField.Inner c;
         //GENERATED FIELDS END
         //GENERATED INNER CLASSES START
         //${inner_classes}

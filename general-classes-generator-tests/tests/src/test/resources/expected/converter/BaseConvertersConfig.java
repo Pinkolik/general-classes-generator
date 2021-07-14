@@ -51,6 +51,8 @@ public class BaseConvertersConfig {
         versionedClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.ver1.SerializableTestClass.class, io.github.pinkolik.general_classes_generator.test.mappers.ver1.SerializableTestClassMapper.INSTANCE);
         generalClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.Simple.class, io.github.pinkolik.general_classes_generator.test.mappers.ver1.SimpleMapper.INSTANCE);
         versionedClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.ver1.Simple.class, io.github.pinkolik.general_classes_generator.test.mappers.ver1.SimpleMapper.INSTANCE);
+        generalClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.UpcastingTestClass.class, ver1.UpcastingTestClassMapper.INSTANCE);
+        versionedClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.ver1.UpcastingTestClass.class, ver1.UpcastingTestClassMapper.INSTANCE);
         return new BaseConverterImpl(generalClassesToMappers, versionedClassesToMappers, "io.github.pinkolik.general_classes_generator.test");
     }
 
@@ -92,6 +94,8 @@ public class BaseConvertersConfig {
         versionedClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.ver2.SerializableTestClass.class, io.github.pinkolik.general_classes_generator.test.mappers.ver2.SerializableTestClassMapper.INSTANCE);
         generalClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.Simple.class, io.github.pinkolik.general_classes_generator.test.mappers.ver2.SimpleMapper.INSTANCE);
         versionedClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.ver2.Simple.class, io.github.pinkolik.general_classes_generator.test.mappers.ver2.SimpleMapper.INSTANCE);
+        generalClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.UpcastingTestClass.class, ver2.UpcastingTestClassMapper.INSTANCE);
+        versionedClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.ver2.UpcastingTestClass.class, ver2.UpcastingTestClassMapper.INSTANCE);
         return new BaseConverterImpl(generalClassesToMappers, versionedClassesToMappers, "io.github.pinkolik.general_classes_generator.test");
     }
 
@@ -133,6 +137,8 @@ public class BaseConvertersConfig {
         versionedClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.ver3.SerializableTestClass.class, io.github.pinkolik.general_classes_generator.test.mappers.ver3.SerializableTestClassMapper.INSTANCE);
         generalClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.Simple.class, io.github.pinkolik.general_classes_generator.test.mappers.ver3.SimpleMapper.INSTANCE);
         versionedClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.ver3.Simple.class, io.github.pinkolik.general_classes_generator.test.mappers.ver3.SimpleMapper.INSTANCE);
+        generalClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.UpcastingTestClass.class, ver3.UpcastingTestClassMapper.INSTANCE);
+        versionedClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.ver3.UpcastingTestClass.class, ver3.UpcastingTestClassMapper.INSTANCE);
         return new BaseConverterImpl(generalClassesToMappers, versionedClassesToMappers, "io.github.pinkolik.general_classes_generator.test");
     }
 

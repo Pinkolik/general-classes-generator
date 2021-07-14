@@ -23,7 +23,8 @@ public class BaseConverterImpl implements BaseConverter {
 
     /**
      * Constructor for {@link BaseConverterImpl}.
-     * @param generalClassesToMappers general classes to mappers map.
+     *
+     * @param generalClassesToMappers   general classes to mappers map.
      * @param versionedClassesToMappers versioned classes to mappers map.
      * @param generalClassesBasePackage base package of general classes, needed for reflection
      *                                  operations in order to detect if field should be attempted
@@ -38,12 +39,21 @@ public class BaseConverterImpl implements BaseConverter {
 
     @Override
     public Object convertToVersionedClass(final Object general) {
+        if (general == null) {
+            return null;
+        }
         Object versionedClass = generalClassesToMappers.get(general.getClass()).mapGeneralToVersioned(general);
         return mapSubclassesToVersionedClasses(versionedClass);
     }
 
     @Override
     public Object convertToGeneralClass(final Object versioned) {
+        if (versioned == null) {
+            return null;
+        }
+        if (!versionedClassesToMappers.containsKey(versioned.getClass())) {
+            throw new IllegalArgumentException(String.format("Mapper for class %s not found", versioned.getClass()));
+        }
         Object generalClass = versionedClassesToMappers.get(versioned.getClass()).mapVersionedToGeneral(versioned);
         return mapSubclassesToGeneralClasses(generalClass);
     }
