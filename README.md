@@ -200,7 +200,7 @@ mapper, you can just use this converter.
 
 ### Built With
 
-* [Java 11](https://www.oracle.com/sg/java/technologies/javase-jdk11-downloads.html)
+* [Java 8](https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html)
 * [Maven 3.6.3](https://maven.apache.org/docs/3.6.3/release-notes.html)
 
 <!-- GETTING STARTED -->
@@ -261,7 +261,7 @@ Add this to your pom.xml.
                             <outputBasePath>
                                 ${project.parent.basedir}/general-classes/src/main/java
                             </outputBasePath>
-                           <makeSerializable>true</makeSerializable>
+                            <makeSerializable>true</makeSerializable>
                         </configuration>
                     </execution>
                 </executions>
@@ -359,7 +359,10 @@ Add this to your pom.xml.
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.1</version>
                     <configuration>
+                        <source>1.8</source>
+                        <target>1.8</target>
                         <!-- See https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html -->
                         <!-- Classpath elements to supply as annotation processor path. If specified, the compiler   -->
                         <!-- will detect annotation processors only in those classpath elements. If omitted, the     -->
