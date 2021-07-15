@@ -135,7 +135,7 @@
                         <configuration>
                             <target>
                                 <echo level="info">Deleting old classes</echo>
-                                <delete failonerror="false">
+                                <delete includeEmptyDirs="true" failonerror="false">
                                     <fileset dir="src/main/java" includes="**/*"/>
                                 </delete>
                             </target>
