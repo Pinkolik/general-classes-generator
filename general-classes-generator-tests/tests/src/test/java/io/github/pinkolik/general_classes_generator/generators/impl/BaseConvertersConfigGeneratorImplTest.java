@@ -18,6 +18,8 @@ class BaseConvertersConfigGeneratorImplTest {
 
     private static final String ACTUAL_PATH = "src/test/resources/actual/src/main/java/";
 
+    private static final String MAPPERS_PACKAGE_PATH = "io/github/pinkolik/general_classes_generator/test/mappers/";
+
     private static final String EXPECTED_PATH = "src/test/resources/expected/converter/";
 
     private static final String VERSION_REGEX_PATTERN = "ver\\d+";
@@ -28,7 +30,9 @@ class BaseConvertersConfigGeneratorImplTest {
             "../test-classes/src/main/java/io/github/pinkolik/general_classes_generator/test/";
 
     private void baseCompareTwoFilesTest(final String filename) throws IOException, IllegalAccessException {
-        Generator mappersGenerator = new MappersGeneratorImpl(VERSION_CLASSES_BASE_PATH, VERSION_REGEX_PATTERN, ACTUAL_PATH);
+        FileUtils.deleteDirectory(new File(ACTUAL_PATH));
+        Generator mappersGenerator =
+                new MappersGeneratorImpl(VERSION_CLASSES_BASE_PATH, VERSION_REGEX_PATTERN, ACTUAL_PATH + MAPPERS_PACKAGE_PATH);
         Generator baseConvertersConfigGenerator =
                 new BaseConvertersConfigGeneratorImpl(VERSION_CLASSES_BASE_PATH, VERSION_REGEX_PATTERN, ACTUAL_PATH,
                                                       ACTUAL_PATH + BASE_PACKAGE_PATH);

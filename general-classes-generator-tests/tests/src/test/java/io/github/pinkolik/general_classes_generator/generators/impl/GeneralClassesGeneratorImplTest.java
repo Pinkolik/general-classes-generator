@@ -29,6 +29,7 @@ class GeneralClassesGeneratorImplTest {
 
     private void baseCompareTwoFilesTest(final String[] filenames, final boolean makeSerializable)
             throws IOException, IllegalAccessException {
+        FileUtils.deleteDirectory(new File(ACTUAL_PATH));
         Generator generator =
                 new GeneralClassesGeneratorImpl(VERSION_CLASSES_BASE_PATH, VERSION_REGEX_PATTERN, ACTUAL_PATH, makeSerializable);
         generator.generate();

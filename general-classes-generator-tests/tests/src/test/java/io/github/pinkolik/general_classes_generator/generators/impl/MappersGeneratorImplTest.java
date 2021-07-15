@@ -19,6 +19,8 @@ class MappersGeneratorImplTest {
     private static final String ACTUAL_PATH =
             "src/test/resources/actual/src/main/java/io/github/pinkolik/general_classes_generator/test/mappers/";
 
+    private static final String ACTUAL_BASE_PATH = "src/test/resources/actual/src/main/java/";
+
     private static final String EXPECTED_PATH = "src/test/resources/expected/mappers/";
 
     private static final String VERSION_REGEX_PATTERN = "ver\\d+";
@@ -27,6 +29,7 @@ class MappersGeneratorImplTest {
             "../test-classes/src/main/java/io/github/pinkolik/general_classes_generator/test/";
 
     private void baseCompareTwoFilesTestForAllVersions(final String[] filenames) throws IOException, IllegalAccessException {
+        FileUtils.deleteDirectory(new File(ACTUAL_BASE_PATH));
         Generator generator = new MappersGeneratorImpl(VERSION_CLASSES_BASE_PATH, VERSION_REGEX_PATTERN, ACTUAL_PATH);
         generator.generate();
         for (String filename : filenames) {
