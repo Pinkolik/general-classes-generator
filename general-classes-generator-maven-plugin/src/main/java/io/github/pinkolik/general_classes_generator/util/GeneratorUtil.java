@@ -21,24 +21,35 @@ public final class GeneratorUtil {
 
     private GeneratorUtil() {}
 
+    public static boolean needInclude(final Set<Pattern> includeClassesRegex, final ClassInfo generalClassInfo) {
+        if (includeClassesRegex == null || includeClassesRegex.isEmpty()) {
+            return true;
+        }
+        return includeClassesRegex.stream().anyMatch(pattern -> pattern.matcher(generalClassInfo.getName()).matches());
+    }
+
     public static String convertPathToPackageName(final String absolutePath) {
         return Paths.get(absolutePath).toString() //system independent
                     .replaceFirst(".*?java.", "") //replace everything up until package
                     .replace(File.separator, "."); //replace separators with dots
     }
 
-    private static String convertClassToGeneralClassName(final Pattern versionRegexPattern, final Class<?> aClass) {
-        String generalClassName = aClass.getName();
-        Matcher matcher = versionRegexPattern.matcher(generalClassName);
+    public static Optional<String> extractVersionStringFromClassName(final Pattern versionRegexPattern, final String className) {
+        Matcher matcher = versionRegexPattern.matcher(className);
         if (matcher.find()) {
-            String version = matcher.group(0);
-            generalClassName = generalClassName.replace("." + version, "");
+            return Optional.of(matcher.group(0));
         }
-        else {
-            throw new IllegalArgumentException(
-                    String.format("Class name %s doesn't contain version pattern \"%s\"", generalClassName, versionRegexPattern));
-        }
-        return generalClassName;
+        return Optional.empty();
+    }
+
+    public static String extractVersionStringFromClassNameOrThrow(final Pattern versionRegexPattern, final String className) {
+        return extractVersionStringFromClassName(versionRegexPattern, className).orElseThrow(() -> new IllegalArgumentException(
+                String.format("Class name %s doesn't contain version pattern \"%s\"", className, versionRegexPattern)));
+    }
+
+    private static String convertClassToGeneralClassName(final Pattern versionRegexPattern, final Class<?> aClass) {
+        String versionString = extractVersionStringFromClassNameOrThrow(versionRegexPattern, aClass.getName());
+        return aClass.getName().replace("." + versionString, "");
     }
 
     private static Map<ClassInfo, Set<Class<?>>> getClassInfosByName(final String className, final Pattern versionRegexPattern)
@@ -109,11 +120,9 @@ public final class GeneratorUtil {
         else {
             genericTypeName = field.getGenericType().getTypeName();
         }
-        Matcher versionMatcher = versionRegexPattern.matcher(genericTypeName);
-        if (versionMatcher.find()) {
-            String version = versionMatcher.group(0);
-            genericTypeName = genericTypeName.replace("." + version, "");
-        }
+        String finalGenericTypeName = genericTypeName;
+        genericTypeName = extractVersionStringFromClassName(versionRegexPattern, genericTypeName).map(
+                versionString -> finalGenericTypeName.replace("." + versionString, "")).orElse(genericTypeName);
         return genericTypeName;
     }
 
@@ -129,13 +138,16 @@ public final class GeneratorUtil {
             String genericTypeName = getGeneralTypeName(versionRegexPattern, field, type);
             boolean isStatic = Modifier.isStatic(field.getModifiers());
             boolean isFinal = Modifier.isFinal(field.getModifiers());
+            boolean isEnumConstant = field.isEnumConstant();
             Object staticFinalValue = null;
-            if (isFinal && isStatic) {
+            String fieldName = field.getName();
+            if (isFinal && isStatic && !isEnumConstant) {
                 field.setAccessible(true);
+                String versionString = extractVersionStringFromClassNameOrThrow(versionRegexPattern, aClass.getName());
+                fieldName = fieldName + "_" + versionString;
                 staticFinalValue = field.get(null);
             }
-            FieldInfo fieldInfo =
-                    new FieldInfo(field.getName(), genericTypeName, isStatic, isFinal, field.isEnumConstant(), staticFinalValue);
+            FieldInfo fieldInfo = new FieldInfo(fieldName, genericTypeName, isStatic, isFinal, isEnumConstant, staticFinalValue);
             fieldInfos.add(fieldInfo);
         }
         return fieldInfos;
@@ -165,24 +177,21 @@ public final class GeneratorUtil {
 
     public static Map<String, Set<ConverterInfo>> buildVersionToConverterInfoMap(final String versionClassesBasePath,
                                                                                  final Pattern versionRegexPattern,
-                                                                                 final String mappersBasePath) {
+                                                                                 final String mappersBasePath,
+                                                                                 final Set<Pattern> includeClassesRegex) {
         Map<ClassInfo, Set<Class<?>>> generalClassInfoToVersionClassesMap =
                 buildGeneralClassInfoToVersionClassesMap(versionClassesBasePath, versionRegexPattern);
         Collection<File> mapperFiles = FileUtils.listFiles(new File(mappersBasePath), new String[] {"java"}, true);
         Map<String, Set<ConverterInfo>> result = new TreeMap<>();
         for (Map.Entry<ClassInfo, Set<Class<?>>> entry : generalClassInfoToVersionClassesMap.entrySet()) {
             ClassInfo generalClassInfo = entry.getKey();
+            if (!needInclude(includeClassesRegex, generalClassInfo)) {
+                continue;
+            }
             String generalClassName = generalClassInfo.getName().replace("$", ".");
             Set<Class<?>> classes = entry.getValue();
             for (Class<?> aClass : classes) {
-                Matcher versionMatcher = versionRegexPattern.matcher(aClass.getCanonicalName());
-                String version;
-                if (versionMatcher.find()) {
-                    version = versionMatcher.group(0);
-                }
-                else {
-                    throw new IllegalArgumentException("Wrong version regex.");
-                }
+                String version = extractVersionStringFromClassNameOrThrow(versionRegexPattern, aClass.getCanonicalName());
                 String mapperSimpleName = getMapperName(aClass);
                 //@formatter:off
                 String mapperClassName = mapperFiles.stream()

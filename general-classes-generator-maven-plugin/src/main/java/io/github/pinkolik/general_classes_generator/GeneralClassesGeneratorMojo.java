@@ -7,6 +7,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 import java.io.File;
+import java.util.Set;
 
 /**
  * Goal which generates generalized classes from multiple versions of this class.
@@ -70,9 +71,20 @@ public class GeneralClassesGeneratorMojo extends AbstractGeneratorMojo {
     @Parameter(name = "makeSerializable")
     private boolean makeSerializable;
 
+    /**
+     * List of regex expressions of classes to include for generation.
+     * If not set all classes are generated.
+     */
+    @Parameter(name = "includeClassesRegex")
+    private Set<String> includeClassesRegex;
+
     @Override
     protected Generator createGenerator() {
-        return new GeneralClassesGeneratorImpl(versionClassesBasePath.getAbsolutePath(), versionRegexPattern,
-                                               outputBasePath.getAbsolutePath(), makeSerializable);
+        GeneralClassesGeneratorImpl generator =
+                new GeneralClassesGeneratorImpl(versionClassesBasePath.getAbsolutePath(), versionRegexPattern,
+                                                outputBasePath.getAbsolutePath());
+        generator.setMakeSerializable(makeSerializable);
+        generator.setIncludeClassesRegex(includeClassesRegex);
+        return generator;
     }
 }

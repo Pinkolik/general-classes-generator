@@ -1,13 +1,14 @@
 package io.github.pinkolik.general_classes_generator;
 
+import io.github.pinkolik.general_classes_generator.conversion.BaseConverter;
 import io.github.pinkolik.general_classes_generator.generators.Generator;
 import io.github.pinkolik.general_classes_generator.generators.impl.BaseConvertersConfigGeneratorImpl;
-import io.github.pinkolik.general_classes_generator.conversion.BaseConverter;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 import java.io.File;
+import java.util.Set;
 
 /**
  * Goal which generates a spring-based converter named {@link BaseConverter}.
@@ -71,9 +72,19 @@ public class BaseConvertersConfigGeneratorMojo extends AbstractGeneratorMojo {
     @Parameter(name = "outputPath", required = true)
     private File outputPath;
 
+    /**
+     * List of regex expressions of classes to include for generation.
+     * If not set all classes are generated.
+     */
+    @Parameter(name = "includeClassesRegex")
+    private Set<String> includeClassesRegex;
+
     @Override
     protected Generator createGenerator() {
-        return new BaseConvertersConfigGeneratorImpl(versionClassesBasePath.getAbsolutePath(), versionRegexPattern,
-                                                     mappersBasePath.getAbsolutePath(), outputPath.getAbsolutePath());
+        BaseConvertersConfigGeneratorImpl generator =
+                new BaseConvertersConfigGeneratorImpl(versionClassesBasePath.getAbsolutePath(), versionRegexPattern,
+                                                      mappersBasePath.getAbsolutePath(), outputPath.getAbsolutePath());
+        generator.setIncludeClassesRegex(includeClassesRegex);
+        return generator;
     }
 }

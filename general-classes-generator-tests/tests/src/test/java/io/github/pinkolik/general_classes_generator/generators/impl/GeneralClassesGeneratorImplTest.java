@@ -2,6 +2,7 @@ package io.github.pinkolik.general_classes_generator.generators.impl;
 
 
 import io.github.pinkolik.general_classes_generator.generators.Generator;
+import io.github.pinkolik.general_classes_generator.util.GeneratorUtil;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,10 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 class GeneralClassesGeneratorImplTest {
 
@@ -30,8 +35,9 @@ class GeneralClassesGeneratorImplTest {
     private void baseCompareTwoFilesTest(final String[] filenames, final boolean makeSerializable)
             throws IOException, IllegalAccessException {
         FileUtils.deleteDirectory(new File(ACTUAL_PATH));
-        Generator generator =
-                new GeneralClassesGeneratorImpl(VERSION_CLASSES_BASE_PATH, VERSION_REGEX_PATTERN, ACTUAL_PATH, makeSerializable);
+        GeneralClassesGeneratorImpl generator =
+                new GeneralClassesGeneratorImpl(VERSION_CLASSES_BASE_PATH, VERSION_REGEX_PATTERN, ACTUAL_PATH);
+        generator.setMakeSerializable(makeSerializable);
         generator.generate();
 
         for (String filename : filenames) {
@@ -101,5 +107,26 @@ class GeneralClassesGeneratorImplTest {
     void inheritanceWithMakeSerializableTest() throws IOException, IllegalAccessException {
         baseCompareTwoFilesTest(new String[] {"InheritanceWithSerializableTestClass.java", "ParentWithSerializableClass.java"},
                                 true);
+    }
+
+    @Test
+    void includeClassesRegexTest() throws IOException, IllegalAccessException {
+        FileUtils.deleteDirectory(new File(ACTUAL_PATH));
+        Set<String> includeClassesRegex = new HashSet<>();
+        includeClassesRegex.add(".*Empty");
+        includeClassesRegex.add(".*Simple");
+        Generator generator =
+                new GeneralClassesGeneratorImpl(VERSION_CLASSES_BASE_PATH, VERSION_REGEX_PATTERN, ACTUAL_PATH);
+        generator.setIncludeClassesRegex(includeClassesRegex);
+
+        generator.generate();
+
+        Collection<File> actual = FileUtils.listFiles(new File(ACTUAL_PATH), new String[] {"java"}, true);
+        Assertions.assertEquals(2, actual.size());
+        for (String classesRegex : includeClassesRegex) {
+            Pattern pattern = Pattern.compile(classesRegex);
+            Assertions.assertTrue(actual.stream().anyMatch(
+                    file -> pattern.matcher(GeneratorUtil.convertPathToClassToClassName(file.getAbsolutePath())).matches()));
+        }
     }
 }
