@@ -4,7 +4,7 @@
     <parent>
         <artifactId>general-classes-generator</artifactId>
         <groupId>io.github.pinkolik</groupId>
-        <version>1.1.2-SNAPSHOT</version>
+        <version>1.1.2-RELEASE</version>
     </parent>
 
     <artifactId>general-classes-generator-maven-plugin</artifactId>
@@ -98,7 +98,7 @@
         <dependency>
             <groupId>io.github.pinkolik</groupId>
             <artifactId>general-classes-generator-conversion</artifactId>
-            <version>1.1.2-SNAPSHOT</version>
+            <version>1.1.2-RELEASE</version>
         </dependency>
     </dependencies>
 
