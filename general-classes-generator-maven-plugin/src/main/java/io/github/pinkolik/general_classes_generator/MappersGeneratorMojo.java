@@ -1,13 +1,14 @@
 package io.github.pinkolik.general_classes_generator;
 
+import io.github.pinkolik.general_classes_generator.conversion.BaseMapper;
 import io.github.pinkolik.general_classes_generator.generators.Generator;
 import io.github.pinkolik.general_classes_generator.generators.impl.MappersGeneratorImpl;
-import io.github.pinkolik.general_classes_generator.conversion.BaseMapper;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 import java.io.File;
+import java.util.Set;
 
 /**
  * Goal which generates mappers which can be used to convert generalized classes to versioned and vice versa.
@@ -73,9 +74,19 @@ public class MappersGeneratorMojo extends AbstractGeneratorMojo {
     @Parameter(name = "outputBasePath", required = true)
     private File outputBasePath;
 
+    /**
+     * List of regex expressions of classes to include for generation.
+     * If not set all classes are generated.
+     */
+    @Parameter(name = "includeClassesRegex")
+    private Set<String> includeClassesRegex;
+
+
     @Override
     protected Generator createGenerator() {
-        return new MappersGeneratorImpl(versionClassesBasePath.getAbsolutePath(), versionRegexPattern,
-                                        outputBasePath.getAbsolutePath());
+        MappersGeneratorImpl generator = new MappersGeneratorImpl(versionClassesBasePath.getAbsolutePath(), versionRegexPattern,
+                                                                  outputBasePath.getAbsolutePath());
+        generator.setIncludeClassesRegex(includeClassesRegex);
+        return generator;
     }
 }

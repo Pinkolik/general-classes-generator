@@ -4,6 +4,7 @@ import io.github.pinkolik.general_classes_generator.conversion.BaseMapper;
 import io.github.pinkolik.general_classes_generator.generators.Generator;
 import io.github.pinkolik.general_classes_generator.util.ClassInfo;
 import io.github.pinkolik.general_classes_generator.util.GeneratorUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
@@ -16,14 +17,15 @@ import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Generates mappers which can be used to convert generalized classes to versioned and vice versa.
  *
  * @see BaseMapper
  */
+@Slf4j
 public class MappersGeneratorImpl implements Generator {
 
     private static final Class<?> BASE_MAPPER_CLASS = BaseMapper.class;
@@ -58,6 +60,8 @@ public class MappersGeneratorImpl implements Generator {
 
     private final String outputBasePath;
 
+    private Set<Pattern> includeClassesRegex;
+
     /**
      * Constructor for {@link MappersGeneratorImpl}.
      *
@@ -91,22 +95,12 @@ public class MappersGeneratorImpl implements Generator {
         this.outputBasePath = outputBasePath;
     }
 
-    private static String getPathToMapper(final String mappersBasePath, final Pattern versionRegexPattern,
-                                          final Class<?> aClass) {
-        Matcher matcher = versionRegexPattern.matcher(aClass.getName());
-        String version;
-        if (matcher.find()) {
-            version = matcher.group(0);
-        }
-        else {
-            throw new IllegalArgumentException(
-                    String.format("Couldn't find version group for class %s using regex %s", aClass.getName(),
-                                  versionRegexPattern.pattern()));
-        }
+    private String getPathToMapper(final Class<?> aClass) {
+        String version = GeneratorUtil.extractVersionStringFromClassNameOrThrow(versionRegexPattern, aClass.getName());
         String className = aClass.getName();
         className = className.substring(className.lastIndexOf(".") + 1);
         Path pathToMapper =
-                Paths.get(mappersBasePath, version, className.replace("$", "_") + GeneratorUtil.MAPPER_POSTFIX + ".java");
+                Paths.get(outputBasePath, version, className.replace("$", "_") + GeneratorUtil.MAPPER_POSTFIX + ".java");
         return pathToMapper.toString();
     }
 
@@ -148,30 +142,43 @@ public class MappersGeneratorImpl implements Generator {
         return sb.length() == 0 ? "" : sb.substring(0, sb.length() - 2);
     }
 
-    private static void writeMappers(final Map<ClassInfo, Set<Class<?>>> generalClassInfoToVersionClassesMap,
-                                     final String outputBasePath, final Pattern versionRegexPattern) throws IOException {
+    private String createMapper(final String generalClassName, final Class<?> aClass, final String pathToMapper)
+            throws IOException {
+        String mapperName = GeneratorUtil.getMapperName(aClass);
+        String packageName = GeneratorUtil.convertPathToClassToClassName(pathToMapper);
+        packageName = packageName.substring(0, packageName.lastIndexOf("."));
+        String mapperTemplate = IOUtils.resourceToString(MAPPER_TEMPLATE_PATH, StandardCharsets.UTF_8,
+                                                         MappersGeneratorImpl.class.getClassLoader());
+        mapperTemplate = mapperTemplate.replace(PACKAGE_NAME_HOLDER, packageName);
+        mapperTemplate = mapperTemplate.replace(BASE_MAPPER_NAME_HOLDER, BASE_MAPPER_CLASS.getName());
+        mapperTemplate = mapperTemplate.replace(BASE_MAPPER_SIMPLE_NAME_HOLDER, BASE_MAPPER_CLASS.getSimpleName());
+        mapperTemplate = mapperTemplate.replace(VERSIONED_CLASS_NAME_HOLDER, aClass.getCanonicalName());
+        mapperTemplate = mapperTemplate.replace(GENERAL_CLASS_NAME_HOLDER, generalClassName.replace("$", "."));
+        mapperTemplate = mapperTemplate.replace(MAPPER_NAME_HOLDER, mapperName);
+        mapperTemplate =
+                mapperTemplate.replace(ADDITIONAL_MAPPINGS_HOLDER, getAdditionalMappingsString(aClass, versionRegexPattern));
+        mapperTemplate = mapperTemplate.replace(ADDITIONAL_MAPPERS_HOLDER, getAdditionalMappersString(aClass));
+        return mapperTemplate;
+    }
+
+    private void writeMapper(final Map.Entry<ClassInfo, Set<Class<?>>> entry) throws IOException {
+        ClassInfo generalClassInfo = entry.getKey();
+        String generalClassName = generalClassInfo.getName();
+        Set<Class<?>> classes = entry.getValue();
+        for (Class<?> aClass : classes) {
+            String pathToMapper = getPathToMapper(aClass);
+            String mapperTemplate = createMapper(generalClassName, aClass, pathToMapper);
+            FileUtils.writeStringToFile(new File(pathToMapper), mapperTemplate, StandardCharsets.UTF_8);
+        }
+    }
+
+    private void writeMappers(final Map<ClassInfo, Set<Class<?>>> generalClassInfoToVersionClassesMap) throws IOException {
         for (Map.Entry<ClassInfo, Set<Class<?>>> entry : generalClassInfoToVersionClassesMap.entrySet()) {
             ClassInfo generalClassInfo = entry.getKey();
-            String generalClassName = generalClassInfo.getName();
-            Set<Class<?>> classes = entry.getValue();
-            for (Class<?> aClass : classes) {
-                String mapperName = GeneratorUtil.getMapperName(aClass);
-                String pathToMapper = getPathToMapper(outputBasePath, versionRegexPattern, aClass);
-                String packageName = GeneratorUtil.convertPathToClassToClassName(pathToMapper);
-                packageName = packageName.substring(0, packageName.lastIndexOf("."));
-                String mapperTemplate = IOUtils.resourceToString(MAPPER_TEMPLATE_PATH, StandardCharsets.UTF_8,
-                                                                 MappersGeneratorImpl.class.getClassLoader());
-                mapperTemplate = mapperTemplate.replace(PACKAGE_NAME_HOLDER, packageName);
-                mapperTemplate = mapperTemplate.replace(BASE_MAPPER_NAME_HOLDER, BASE_MAPPER_CLASS.getName());
-                mapperTemplate = mapperTemplate.replace(BASE_MAPPER_SIMPLE_NAME_HOLDER, BASE_MAPPER_CLASS.getSimpleName());
-                mapperTemplate = mapperTemplate.replace(VERSIONED_CLASS_NAME_HOLDER, aClass.getCanonicalName());
-                mapperTemplate = mapperTemplate.replace(GENERAL_CLASS_NAME_HOLDER, generalClassName.replace("$", "."));
-                mapperTemplate = mapperTemplate.replace(MAPPER_NAME_HOLDER, mapperName);
-                mapperTemplate = mapperTemplate
-                        .replace(ADDITIONAL_MAPPINGS_HOLDER, getAdditionalMappingsString(aClass, versionRegexPattern));
-                mapperTemplate = mapperTemplate.replace(ADDITIONAL_MAPPERS_HOLDER, getAdditionalMappersString(aClass));
-                FileUtils.writeStringToFile(new File(pathToMapper), mapperTemplate, StandardCharsets.UTF_8);
+            if (!GeneratorUtil.needInclude(includeClassesRegex, generalClassInfo)) {
+                continue;
             }
+            writeMapper(entry);
         }
     }
 
@@ -179,6 +186,19 @@ public class MappersGeneratorImpl implements Generator {
     public void generate() throws IOException {
         Map<ClassInfo, Set<Class<?>>> generalClassInfoToVersionClassesMap =
                 GeneratorUtil.buildGeneralClassInfoToVersionClassesMap(versionClassesBasePath, versionRegexPattern);
-        writeMappers(generalClassInfoToVersionClassesMap, outputBasePath, versionRegexPattern);
+        writeMappers(generalClassInfoToVersionClassesMap);
+    }
+
+    /**
+     * @param includeClassesRegex List of regex expressions of classes to include for generation.
+     *                            If not set all classes are generated.
+     */
+    @Override
+    public void setIncludeClassesRegex(final Set<String> includeClassesRegex) {
+        log.info("Set includeClassesRegex to {}", includeClassesRegex);
+        if (includeClassesRegex == null || includeClassesRegex.isEmpty()) {
+            return;
+        }
+        this.includeClassesRegex = includeClassesRegex.stream().map(Pattern::compile).collect(Collectors.toSet());
     }
 }

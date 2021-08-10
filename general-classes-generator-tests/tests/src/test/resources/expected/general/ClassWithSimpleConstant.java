@@ -9,11 +9,11 @@ import io.github.pinkolik.general_classes_generator.conversion.Generalized;
 public class ClassWithSimpleConstant implements Generalized {
     //GENERATED FIELDS START
     @Getter
-    private static final int A = 1;
+    private static final int A_ver1 = 1;
     @Getter
-    private static final java.lang.String B = "String";
+    private static final java.lang.String B_ver2 = "String";
     @Getter
-    private static final double C = 0.25;
+    private static final double C_ver3 = 0.25;
     //GENERATED FIELDS END
     //GENERATED INNER CLASSES START
     //${inner_classes}

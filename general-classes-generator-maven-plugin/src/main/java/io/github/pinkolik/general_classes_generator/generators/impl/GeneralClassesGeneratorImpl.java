@@ -14,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Generates generalized classes from multiple versions of this class.
@@ -55,7 +56,9 @@ public class GeneralClassesGeneratorImpl implements Generator {
 
     private final String outputBasePath;
 
-    private final boolean makeSerializable;
+    private boolean makeSerializable;
+
+    private Set<Pattern> includeClassesRegex;
 
     /**
      * Constructor for {@link GeneralClassesGeneratorImpl}.
@@ -78,17 +81,15 @@ public class GeneralClassesGeneratorImpl implements Generator {
      *                               "${project.basedir}/src/main/java/your_package/ver2/Example.java",
      *                               "${project.basedir}/src/main/java/your_package/ver3/Example.java".
      *                               And outputBasePath is "${project.basedir}/src/main/java/another_package".
-     * @param makeSerializable       If set to {@code true} makes generalized classes implement {@link java.io.Serializable} interface.
      */
     public GeneralClassesGeneratorImpl(final String versionClassesBasePath, final String versionRegexPattern,
-                                       final String outputBasePath, final boolean makeSerializable) {
+                                       final String outputBasePath) {
         this.versionClassesBasePath = versionClassesBasePath;
         this.versionRegexPattern = Pattern.compile(versionRegexPattern);
         this.outputBasePath = outputBasePath;
-        this.makeSerializable = makeSerializable;
     }
 
-    private static String getPathToClass(final String outputBasePath, final ClassInfo classInfo) {
+    private String getPathToClass(final ClassInfo classInfo) {
         String generalClassName = classInfo.getName();
         return classInfo.isMember() ? outputBasePath + File.separator +
                 generalClassName.substring(0, generalClassName.indexOf('$')).replace(".", File.separator) + ".java" :
@@ -97,8 +98,8 @@ public class GeneralClassesGeneratorImpl implements Generator {
 
     private static String getSimpleClassName(final ClassInfo generalClassInfo) {
         String generalClassName = generalClassInfo.getName();
-        return generalClassInfo.isMember() ? generalClassName.substring(generalClassName.lastIndexOf("$") + 1) : generalClassName
-                .substring(generalClassName.lastIndexOf(".") + 1);
+        return generalClassInfo.isMember() ? generalClassName.substring(
+                generalClassName.lastIndexOf("$") + 1) : generalClassName.substring(generalClassName.lastIndexOf(".") + 1);
     }
 
     private static String getClassTemplate(final ClassInfo classInfo) throws IOException {
@@ -203,10 +204,9 @@ public class GeneralClassesGeneratorImpl implements Generator {
         return generalClassInfo.getSuperclassName() == null ? "" : "extends " + generalClassInfo.getSuperclassName() + " ";
     }
 
-    private static void writeGeneralClass(final String outputBasePath, final ClassInfo generalClassInfo,
-                                          final Set<FieldInfo> fieldInfos, final boolean makeSerializable) throws IOException {
+    private void writeGeneralClass(final ClassInfo generalClassInfo, final Set<FieldInfo> fieldInfos) throws IOException {
         String generalClassName = generalClassInfo.getName();
-        String pathToClass = getPathToClass(outputBasePath, generalClassInfo);
+        String pathToClass = getPathToClass(generalClassInfo);
         String packageName = generalClassName.substring(0, generalClassName.lastIndexOf("."));
         String simpleClassName = getSimpleClassName(generalClassInfo);
         String classTemplate = getClassTemplate(generalClassInfo);
@@ -226,12 +226,14 @@ public class GeneralClassesGeneratorImpl implements Generator {
         writeTemplateToFile(pathToClass, classTemplate, generalClassInfo);
     }
 
-    private static void writeGeneralClasses(final Map<ClassInfo, Set<FieldInfo>> generalClassInfoToFieldInfosMap,
-                                            final String outputBasePath, final boolean makeSerializable) throws IOException {
+    private void writeGeneralClasses(final Map<ClassInfo, Set<FieldInfo>> generalClassInfoToFieldInfosMap) throws IOException {
         for (Map.Entry<ClassInfo, Set<FieldInfo>> entry : generalClassInfoToFieldInfosMap.entrySet()) {
             ClassInfo generalClassInfo = entry.getKey();
             Set<FieldInfo> fieldInfos = entry.getValue();
-            writeGeneralClass(outputBasePath, generalClassInfo, fieldInfos, makeSerializable);
+            if (!GeneratorUtil.needInclude(includeClassesRegex, generalClassInfo)) {
+                continue;
+            }
+            writeGeneralClass(generalClassInfo, fieldInfos);
         }
     }
 
@@ -239,7 +241,27 @@ public class GeneralClassesGeneratorImpl implements Generator {
     public void generate() throws IOException, IllegalAccessException {
         Map<ClassInfo, Set<FieldInfo>> generalClassInfoToFieldInfosMap =
                 GeneratorUtil.buildGeneralClassNameToFieldInfoMap(versionClassesBasePath, versionRegexPattern);
-        writeGeneralClasses(generalClassInfoToFieldInfosMap, outputBasePath, makeSerializable);
+        writeGeneralClasses(generalClassInfoToFieldInfosMap);
     }
 
+    /**
+     * @param makeSerializable If set to {@code true} makes generalized classes implement {@link java.io.Serializable} interface.
+     */
+    public void setMakeSerializable(final boolean makeSerializable) {
+        log.info("Set makeSerializable to {}", makeSerializable);
+        this.makeSerializable = makeSerializable;
+    }
+
+    /**
+     * @param includeClassesRegex List of regex expressions of classes to include for generation.
+     *                            If not set all classes are generated.
+     */
+    @Override
+    public void setIncludeClassesRegex(final Set<String> includeClassesRegex) {
+        log.info("Set includeClassesRegex to {}", includeClassesRegex);
+        if (includeClassesRegex == null || includeClassesRegex.isEmpty()) {
+            return;
+        }
+        this.includeClassesRegex = includeClassesRegex.stream().map(Pattern::compile).collect(Collectors.toSet());
+    }
 }

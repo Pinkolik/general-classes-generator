@@ -6,6 +6,7 @@ import io.github.pinkolik.general_classes_generator.conversion.impl.BaseConverte
 import io.github.pinkolik.general_classes_generator.generators.Generator;
 import io.github.pinkolik.general_classes_generator.util.ConverterInfo;
 import io.github.pinkolik.general_classes_generator.util.GeneratorUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
@@ -16,12 +17,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Generates a spring-based converter named {@link BaseConverter}.
  *
  * @see BaseConverter
  */
+@Slf4j
 public class BaseConvertersConfigGeneratorImpl implements Generator {
 
     private static final String BASE_CONVERTERS_CONFIG_TEMPLATE_PATH = "templates/BaseConvertersConfigTemplate.java";
@@ -64,6 +67,8 @@ public class BaseConvertersConfigGeneratorImpl implements Generator {
 
     private final String outputPath;
 
+    private Set<Pattern> includeClassesRegex;
+
     /**
      * Constructor for {@link BaseConvertersConfigGeneratorImpl}.
      *
@@ -95,8 +100,8 @@ public class BaseConvertersConfigGeneratorImpl implements Generator {
         this.outputPath = outputPath;
     }
 
-    private static String buildBeansString(final Map<String, Set<ConverterInfo>> versionToConverterInfoMap,
-                                           final String generalClassesBasePackage) throws IOException {
+    private String buildBeansString(final Map<String, Set<ConverterInfo>> versionToConverterInfoMap,
+                                    final String generalClassesBasePackage) throws IOException {
         String baseConverterBeanTemplate = IOUtils.resourceToString(BASE_CONVERTER_BEAN_TEMPLATE_PATH, StandardCharsets.UTF_8,
                                                                     BaseConvertersConfigGeneratorImpl.class.getClassLoader());
         StringBuilder beansStringBuilder = new StringBuilder();
@@ -143,13 +148,12 @@ public class BaseConvertersConfigGeneratorImpl implements Generator {
         return beansStringBuilder.toString();
     }
 
-    private static void writeBeansConverterConfig(final Map<String, Set<ConverterInfo>> versionToConverterInfoMap,
-                                                  final String outputBasePath, final String generalClassesBasePackage)
-            throws IOException {
+    private void writeBeansConverterConfig(final Map<String, Set<ConverterInfo>> versionToConverterInfoMap,
+                                           final String generalClassesBasePackage) throws IOException {
         String baseConvertersConfigTemplate =
                 IOUtils.resourceToString(BASE_CONVERTERS_CONFIG_TEMPLATE_PATH, StandardCharsets.UTF_8,
                                          BaseConvertersConfigGeneratorImpl.class.getClassLoader());
-        String pathToClass = outputBasePath + File.separator + BASE_CONVERTERS_CONFIG_FILE_NAME;
+        String pathToClass = outputPath + File.separator + BASE_CONVERTERS_CONFIG_FILE_NAME;
         String fullClassName = GeneratorUtil.convertPathToClassToClassName(pathToClass);
         String packageName = fullClassName.substring(0, fullClassName.lastIndexOf("."));
         String beansString = buildBeansString(versionToConverterInfoMap, generalClassesBasePackage);
@@ -173,8 +177,22 @@ public class BaseConvertersConfigGeneratorImpl implements Generator {
     @Override
     public void generate() throws IOException {
         Map<String, Set<ConverterInfo>> versionToConverterInfoMap =
-                GeneratorUtil.buildVersionToConverterInfoMap(versionClassesBasePath, versionRegexPattern, mappersBasePath);
+                GeneratorUtil.buildVersionToConverterInfoMap(versionClassesBasePath, versionRegexPattern, mappersBasePath,
+                                                             includeClassesRegex);
         String generalClassesBasePackage = GeneratorUtil.convertPathToPackageName(versionClassesBasePath);
-        writeBeansConverterConfig(versionToConverterInfoMap, outputPath, generalClassesBasePackage);
+        writeBeansConverterConfig(versionToConverterInfoMap, generalClassesBasePackage);
+    }
+
+    /**
+     * @param includeClassesRegex List of regex expressions of classes to include for generation.
+     *                            If not set all classes are generated.
+     */
+    @Override
+    public void setIncludeClassesRegex(final Set<String> includeClassesRegex) {
+        log.info("Set includeClassesRegex to {}", includeClassesRegex);
+        if (includeClassesRegex == null || includeClassesRegex.isEmpty()) {
+            return;
+        }
+        this.includeClassesRegex = includeClassesRegex.stream().map(Pattern::compile).collect(Collectors.toSet());
     }
 }
