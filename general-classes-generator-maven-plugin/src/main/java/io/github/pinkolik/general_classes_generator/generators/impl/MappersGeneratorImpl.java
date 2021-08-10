@@ -99,8 +99,14 @@ public class MappersGeneratorImpl implements Generator {
         String version = GeneratorUtil.extractVersionStringFromClassNameOrThrow(versionRegexPattern, aClass.getName());
         String className = aClass.getName();
         className = className.substring(className.lastIndexOf(".") + 1);
-        Path pathToMapper =
-                Paths.get(outputBasePath, version, className.replace("$", "_") + GeneratorUtil.MAPPER_POSTFIX + ".java");
+        //@formatter:off
+        String packagePathAfterVersion = aClass.getPackage()
+                                     .getName()
+                                     .replaceFirst(".*\\."+version+"\\.?", "") //remove everything before version
+                                     .replace(".", File.separator); //package to path
+        //@formatter:on
+        Path pathToMapper = Paths.get(outputBasePath, version, packagePathAfterVersion,
+                                      className.replace("$", "_") + GeneratorUtil.MAPPER_POSTFIX + ".java");
         return pathToMapper.toString();
     }
 
