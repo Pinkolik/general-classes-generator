@@ -158,10 +158,10 @@ public class GeneralClassesGeneratorImpl implements Generator {
             if (first) {
                 first = false;
             }
-            else {
+            else if (!generalClassInfo.isEnum() || fieldInfo.isEnum()) {
                 fieldsStringBuilder.append(spacesPrefix);
             }
-            if (!fieldInfo.isEnum()) {
+            if (!generalClassInfo.isEnum()) {
                 //@formatter:off
                 fieldsStringBuilder.append(fieldInfo.isStatic() && fieldInfo.isFinal() ? "@Getter\n" + spacesPrefix : "")
                                    .append("private ")
@@ -174,7 +174,7 @@ public class GeneralClassesGeneratorImpl implements Generator {
                                    .append(";\n");
                 //@formatter:on
             }
-            else {
+            else if (fieldInfo.isEnum()) {
                 //@formatter:off
                 fieldsStringBuilder.append(fieldInfo.getName())
                                    .append(",\n");
