@@ -110,13 +110,17 @@ class GeneralClassesGeneratorImplTest {
     }
 
     @Test
+    void enumWithField_fieldNotGenerated_Test() throws IOException, IllegalAccessException {
+        baseCompareTwoFilesTest(new String[] {"EnumWithField.java"});
+    }
+
+    @Test
     void includeClassesRegexTest() throws IOException, IllegalAccessException {
         FileUtils.deleteDirectory(new File(ACTUAL_PATH));
         Set<String> includeClassesRegex = new HashSet<>();
         includeClassesRegex.add(".*Empty");
         includeClassesRegex.add(".*Simple");
-        Generator generator =
-                new GeneralClassesGeneratorImpl(VERSION_CLASSES_BASE_PATH, VERSION_REGEX_PATTERN, ACTUAL_PATH);
+        Generator generator = new GeneralClassesGeneratorImpl(VERSION_CLASSES_BASE_PATH, VERSION_REGEX_PATTERN, ACTUAL_PATH);
         generator.setIncludeClassesRegex(includeClassesRegex);
 
         generator.generate();
