@@ -16,6 +16,12 @@
 
     <name>General Class Generator</name>
 
+    <description>
+        This is the parent pom for such dependencies as
+        general-classes-generator-conversion and
+        general-classes-generator-maven-plugin.
+    </description>
+
     <url>https://github.com/Pinkolik/general-classes-generator</url>
 
     <issueManagement>
