@@ -27,6 +27,8 @@ public class BaseConvertersConfig {
         versionedClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.ver1.EnumIsNotSerializable.class, io.github.pinkolik.general_classes_generator.test.mappers.ver1.EnumIsNotSerializableMapper.INSTANCE);
         generalClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.EnumWithField.class, io.github.pinkolik.general_classes_generator.test.mappers.ver1.EnumWithFieldMapper.INSTANCE);
         versionedClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.ver1.EnumWithField.class, io.github.pinkolik.general_classes_generator.test.mappers.ver1.EnumWithFieldMapper.INSTANCE);
+        generalClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.IgnoreNullTest.class, io.github.pinkolik.general_classes_generator.test.mappers.ver1.IgnoreNullTestMapper.INSTANCE);
+        versionedClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.ver1.IgnoreNullTest.class, io.github.pinkolik.general_classes_generator.test.mappers.ver1.IgnoreNullTestMapper.INSTANCE);
         generalClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.InheritanceTestClass.class, io.github.pinkolik.general_classes_generator.test.mappers.ver1.InheritanceTestClassMapper.INSTANCE);
         versionedClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.ver1.InheritanceTestClass.class, io.github.pinkolik.general_classes_generator.test.mappers.ver1.InheritanceTestClassMapper.INSTANCE);
         generalClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.InheritanceWithSerializableTestClass.class, io.github.pinkolik.general_classes_generator.test.mappers.ver1.InheritanceWithSerializableTestClassMapper.INSTANCE);
@@ -72,6 +74,8 @@ public class BaseConvertersConfig {
         versionedClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.ver2.EnumIsNotSerializable.class, io.github.pinkolik.general_classes_generator.test.mappers.ver2.EnumIsNotSerializableMapper.INSTANCE);
         generalClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.EnumWithField.class, io.github.pinkolik.general_classes_generator.test.mappers.ver2.EnumWithFieldMapper.INSTANCE);
         versionedClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.ver2.EnumWithField.class, io.github.pinkolik.general_classes_generator.test.mappers.ver2.EnumWithFieldMapper.INSTANCE);
+        generalClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.IgnoreNullTest.class, io.github.pinkolik.general_classes_generator.test.mappers.ver2.IgnoreNullTestMapper.INSTANCE);
+        versionedClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.ver2.IgnoreNullTest.class, io.github.pinkolik.general_classes_generator.test.mappers.ver2.IgnoreNullTestMapper.INSTANCE);
         generalClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.InheritanceTestClass.class, io.github.pinkolik.general_classes_generator.test.mappers.ver2.InheritanceTestClassMapper.INSTANCE);
         versionedClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.ver2.InheritanceTestClass.class, io.github.pinkolik.general_classes_generator.test.mappers.ver2.InheritanceTestClassMapper.INSTANCE);
         generalClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.InheritanceWithSerializableTestClass.class, io.github.pinkolik.general_classes_generator.test.mappers.ver2.InheritanceWithSerializableTestClassMapper.INSTANCE);
@@ -117,6 +121,8 @@ public class BaseConvertersConfig {
         versionedClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.ver3.EnumIsNotSerializable.class, io.github.pinkolik.general_classes_generator.test.mappers.ver3.EnumIsNotSerializableMapper.INSTANCE);
         generalClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.EnumWithField.class, io.github.pinkolik.general_classes_generator.test.mappers.ver3.EnumWithFieldMapper.INSTANCE);
         versionedClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.ver3.EnumWithField.class, io.github.pinkolik.general_classes_generator.test.mappers.ver3.EnumWithFieldMapper.INSTANCE);
+        generalClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.IgnoreNullTest.class, io.github.pinkolik.general_classes_generator.test.mappers.ver3.IgnoreNullTestMapper.INSTANCE);
+        versionedClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.ver3.IgnoreNullTest.class, io.github.pinkolik.general_classes_generator.test.mappers.ver3.IgnoreNullTestMapper.INSTANCE);
         generalClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.InheritanceTestClass.class, io.github.pinkolik.general_classes_generator.test.mappers.ver3.InheritanceTestClassMapper.INSTANCE);
         versionedClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.ver3.InheritanceTestClass.class, io.github.pinkolik.general_classes_generator.test.mappers.ver3.InheritanceTestClassMapper.INSTANCE);
         generalClassesToMappers.put(io.github.pinkolik.general_classes_generator.test.InheritanceWithSerializableTestClass.class, io.github.pinkolik.general_classes_generator.test.mappers.ver3.InheritanceWithSerializableTestClassMapper.INSTANCE);

@@ -2,6 +2,7 @@ package io.github.pinkolik.general_classes_generator.conversion.impl;
 
 import io.github.pinkolik.general_classes_generator.conversion.BaseConverter;
 import io.github.pinkolik.general_classes_generator.conversion.Generalized;
+import io.github.pinkolik.general_classes_generator.test.IgnoreNullTest;
 import io.github.pinkolik.general_classes_generator.test.InnerClassWithGenericField;
 import io.github.pinkolik.general_classes_generator.test.Simple;
 import io.github.pinkolik.general_classes_generator.test.UpcastingTestClass;
@@ -24,8 +25,6 @@ public class BaseConverterImplTest {
     @Autowired
     @Qualifier("baseConverterVer1")
     private BaseConverter baseConverterVer1;
-
-    public static class ClassWithoutMapper implements Generalized {}
 
     /*********************************************
      * 1. Wrong package test                      *
@@ -153,8 +152,8 @@ public class BaseConverterImplTest {
 
         Object result = baseConverterVer1.convertToVersionedClass(obj);
 
-        Assertions
-                .assertTrue(result instanceof io.github.pinkolik.general_classes_generator.test.ver1.InnerClassWithGenericField);
+        Assertions.assertTrue(
+                result instanceof io.github.pinkolik.general_classes_generator.test.ver1.InnerClassWithGenericField);
         List<io.github.pinkolik.general_classes_generator.test.ver1.InnerClassWithGenericField.Inner> resultList =
                 ((io.github.pinkolik.general_classes_generator.test.ver1.InnerClassWithGenericField) result).getA();
         Assertions.assertEquals(3, resultList.size());
@@ -245,4 +244,19 @@ public class BaseConverterImplTest {
             Assertions.assertEquals(simple.getA(), simpleResult.getA());
         }
     }
+
+    @Test
+    void generalToVersionedIgnoreNullTest() {
+        IgnoreNullTest ignoreNullTest = new IgnoreNullTest();
+        ignoreNullTest.setD("test");
+
+        io.github.pinkolik.general_classes_generator.test.ver1.IgnoreNullTest versioned =
+                (io.github.pinkolik.general_classes_generator.test.ver1.IgnoreNullTest) baseConverterVer1.convertToVersionedClass(
+                        ignoreNullTest);
+
+        Assertions.assertEquals(ignoreNullTest.getD(), versioned.getD());
+        Assertions.assertTrue(io.github.pinkolik.general_classes_generator.test.ver1.IgnoreNullTest.aWasNotSet);
+    }
+
+    public static class ClassWithoutMapper implements Generalized {}
 }

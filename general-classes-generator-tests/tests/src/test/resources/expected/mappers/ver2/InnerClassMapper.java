@@ -1,10 +1,11 @@
 package io.github.pinkolik.general_classes_generator.test.mappers.ver2;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.factory.Mappers;
 import io.github.pinkolik.general_classes_generator.conversion.BaseMapper;
 
-@Mapper(uses = {InnerClass_InnerMapper.class, })
+@Mapper(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS, uses = {InnerClass_InnerMapper.class, })
 public interface InnerClassMapper extends
         BaseMapper<io.github.pinkolik.general_classes_generator.test.ver2.InnerClass, io.github.pinkolik.general_classes_generator.test.InnerClass> {
 
